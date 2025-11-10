@@ -75,6 +75,7 @@ ehthumbs.db
 *.generated.cs
 
 # Rider and workspace specific
+# Ignore the whole .idea directory (personal Rider settings)
 .idea/
 *.sln.iml
 
@@ -92,5 +93,9 @@ ehthumbs.db
 !appsettings.json
 appsettings.Development.json
 
-# End of .gitignore
+# Visual Studio 2022 specific notes:
+# - .vs/ is already ignored above
+# - Keep solution and project files tracked (.sln, .csproj)
+# - If you want to add editorconfig or shared settings, commit them explicitly
 
+# End of .gitignore
