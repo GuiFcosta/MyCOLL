@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MyCOLL.Shared")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+961d7c582c2c0d04dc2cde8bb7d67b86af024799")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+07232f9dfabedfe73cbce3c94cdb5c42cb419aa7")]
 [assembly: System.Reflection.AssemblyProductAttribute("MyCOLL.Shared")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MyCOLL.Shared")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

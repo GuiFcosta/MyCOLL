@@ -144,3 +144,4 @@ C:\Users\gbigu\RiderProjects\MyCOLL\MyCOLL\bin\Debug\net8.0\runtimes\win\lib\net
 C:\Users\gbigu\RiderProjects\MyCOLL\MyCOLL\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
 C:\Users\gbigu\RiderProjects\MyCOLL\MyCOLL\bin\Debug\net8.0\AutoMapper.dll
 C:\Users\gbigu\RiderProjects\MyCOLL\MyCOLL\bin\Debug\net8.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+C:\Users\gbigu\RiderProjects\MyCOLL\MyCOLL\obj\Debug\net8.0\MyCOLL.sourcelink.json
