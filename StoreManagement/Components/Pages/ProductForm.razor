@@ -36,8 +36,23 @@ else
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Price:</label>
+            <label class="form-label">Base Price:</label>
             <InputNumber class="form-control" @bind-Value="_product.BasePrice" />
+        </div>
+        
+        <div class="mb-3">
+            <label class="form-label">Sell Tax:</label>
+            <InputNumber class="form-control" @bind-Value="_product.SellTax" />
+        </div>
+        
+        <div class="mb-3">
+            <label class="form-label">State:</label>
+            <InputText class="form-control" @bind-Value="_product.State" />
+        </div>
+        
+        <div class="mb-3">
+            <label class="form-label">Condition:</label>
+            <InputText class="form-control" @bind-Value="_product.Condition" />
         </div>
 
         <div class="mb-3">
