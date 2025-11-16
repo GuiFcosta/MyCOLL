@@ -24,5 +24,5 @@ public class ProductUpdateDto
     public State State { get; set; }
     
     [Required]
-    public ICollection<string>? Categories { get; set; }
+    public ICollection<int>? CategoryIds { get; set; }
 }

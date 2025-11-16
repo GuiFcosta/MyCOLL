@@ -14,19 +14,19 @@ public class ApiService
     }
     
     // GET all products
-    public async Task<List<ProductViewModel>?> GetProductsAsync()
+    public async Task<List<ProductReadViewModel>?> GetProductsAsync()
     {
         var response = await _httpClient.GetAsync("api/Product");
         if(!response.IsSuccessStatusCode && response.StatusCode != HttpStatusCode.NoContent)
         {
             throw new Exception("Error fetching products from API");
         }
-        return await _httpClient.GetFromJsonAsync<List<ProductViewModel>>("api/Product");
+        return await _httpClient.GetFromJsonAsync<List<ProductReadViewModel>>("api/Product");
     }
     // GET product by ID
-    public async Task<ProductViewModel?> GetProductByIdAsync(int id)
+    public async Task<ProductReadViewModel?> GetProductByIdAsync(int id)
     {
-        return await _httpClient.GetFromJsonAsync<ProductViewModel>($"api/Product/{id}");
+        return await _httpClient.GetFromJsonAsync<ProductReadViewModel>($"api/Product/{id}");
     }
     // CREATE a new product
     public async Task CreateProductAsync(ProductViewModel product)
@@ -49,5 +49,4 @@ public class ApiService
     {
         return await _httpClient.GetFromJsonAsync<List<CategoryViewModel>>("api/Category");
     }
-
 }

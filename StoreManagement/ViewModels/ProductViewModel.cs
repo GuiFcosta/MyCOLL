@@ -16,13 +16,14 @@ public class ProductViewModel
     
     [Range(0, 100, ErrorMessage = "Sell Tax must be between 0 and 100")]
     public decimal SellTax { get; set; }
-    
+
     [Required(ErrorMessage = "Condition is required")]
-    public string? Condition { get; set; }
+    public int Condition { get; set; } = 0;
+
+    [Required(ErrorMessage = "State is required")]
+    public int State { get; set; } = 0;
     
-    [Required(ErrorMessage =  "State is required")]
-    public string? State { get; set; }
-    
-    [Required(ErrorMessage = "Condition is required")]
-    public int CategoryId { get; set; }
+    //[Required(ErrorMessage = "Category is required")]
+    // Allow multiple categories
+    public ICollection<int> CategoryIds { get; set; } = new List<int>();
 }

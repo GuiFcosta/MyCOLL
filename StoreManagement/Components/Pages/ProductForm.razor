@@ -15,7 +15,7 @@ else
     <h3>New Product</h3>
 }
 
-@if (_product == null)
+@if (_productRead == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -47,12 +47,19 @@ else
         
         <div class="mb-3">
             <label class="form-label">State:</label>
-            <InputText class="form-control" @bind-Value="_product.State" />
+            <InputSelect class="form-control" @bind-Value="_product.State">
+                <option value="0">Inactive</option>
+                <option value="1">Active</option>
+            </InputSelect>
         </div>
         
         <div class="mb-3">
             <label class="form-label">Condition:</label>
-            <InputText class="form-control" @bind-Value="_product.Condition" />
+            <InputSelect class="form-control" @bind-Value="_product.Condition">
+                <option value="0">New</option>
+                <option value="1">Used</option>
+                <option value="2">Refurbished</option>
+            </InputSelect>
         </div>
 
         <div class="mb-3">
@@ -63,13 +70,15 @@ else
             }
             else
             {
-                <InputSelect class="form-select" @bind-Value="_product.CategoryId">
-                    <option value="0">-- Select a category --</option>
+                <div>
                     @foreach (var cat in _categories)
                     {
-                        <option value="@cat.Id">@cat.Name</option>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="cat_@cat.Id" checked="@_product.CategoryIds.Contains(cat.Id)" @onclick="(() => ToggleCategory(cat.Id))" />
+                            <label class="form-check-label" for="cat_@cat.Id">@cat.Name</label>
+                        </div>
                     }
-                </InputSelect>
+                </div>
             }
         </div>
 
@@ -83,7 +92,8 @@ else
     [Parameter]
     public int? Id { get; set; }
 
-    private ProductViewModel? _product = new ProductViewModel();
+    private ProductViewModel? _product;
+    private ProductReadViewModel? _productRead;
     private List<CategoryViewModel>? _categories;
     private bool IsEditMode => Id.HasValue;
 
@@ -93,12 +103,29 @@ else
 
         if (IsEditMode)
         {
-            _product = await ApiService.GetProductByIdAsync(Id.Value);
+            _productRead = await ApiService.GetProductByIdAsync(Id.Value);
+            _product = new ProductViewModel
+            {
+                Name = _productRead.Name,
+                Description = _productRead.Description,
+                BasePrice = _productRead.BasePrice,
+                SellTax = _productRead.SellTax,
+            };
         }
         else
         {
             _product = new ProductViewModel();
         }
+    }
+
+    private void ToggleCategory(int id)
+    {
+        if (_product == null) return;
+
+        if (_product.CategoryIds.Contains(id))
+            _product.CategoryIds.Remove(id);
+        else
+            _product.CategoryIds.Add(id);
     }
 
     private async Task HandleSubmit()

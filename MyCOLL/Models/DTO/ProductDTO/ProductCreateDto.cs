@@ -18,10 +18,10 @@ public class ProductCreateDto
     public decimal SellTax { get; set; }
 
     [Required]
-    public Condition Condition { get; set; } = Condition.New;
+    public Condition? Condition { get; set; }
 
     [Required]
-    public State State { get; set; } = State.Inactive;
+    public State? State { get; set; }
     
     [Required]
     public ICollection<int>? CategoryIds { get; set; }
