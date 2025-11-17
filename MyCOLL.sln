@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCOLL.Shared", "MyCOLL.Sha
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreManagement", "StoreManagement\StoreManagement.csproj", "{0067A989-B37D-4356-88A0-1B0D7EDB0E2D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCOLL.App", "MyCOLL.App\MyCOLL.App.csproj", "{5CEEACD7-94CD-4D96-828B-CF6A1A1078AA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{0067A989-B37D-4356-88A0-1B0D7EDB0E2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0067A989-B37D-4356-88A0-1B0D7EDB0E2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0067A989-B37D-4356-88A0-1B0D7EDB0E2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CEEACD7-94CD-4D96-828B-CF6A1A1078AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CEEACD7-94CD-4D96-828B-CF6A1A1078AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CEEACD7-94CD-4D96-828B-CF6A1A1078AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CEEACD7-94CD-4D96-828B-CF6A1A1078AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
