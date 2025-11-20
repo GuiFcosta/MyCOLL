@@ -1,0 +1,156 @@
+@page "/product/new"
+@page "/product/edit/{Id:int}"
+
+@using MyCOLL.Admin.ViewModels
+@inject MyCOLL.Admin.Services.ApiService ApiService
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+
+@if (IsEditMode)
+{
+    <h3>Edit Product</h3>
+}
+else
+{
+    <h3>New Product</h3>
+}
+
+@if (_productRead == null && _product == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <EditForm Model="_product" OnValidSubmit="HandleSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="mb-3">
+            <label class="form-label">Name:</label>
+            <InputText class="form-control" @bind-Value="_product.Name" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Description:</label>
+            <InputTextArea class="form-control" @bind-Value="_product.Description" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Base Price:</label>
+            <InputNumber class="form-control" @bind-Value="_product.BasePrice" />
+        </div>
+        
+        <div class="mb-3">
+            <label class="form-label">Sell Tax:</label>
+            <InputNumber class="form-control" @bind-Value="_product.SellTax" />
+        </div>
+        
+        <div class="mb-3">
+            <label class="form-label">State:</label>
+            <InputSelect class="form-control" @bind-Value="_product.State">
+                <option value="0">Inactive</option>
+                <option value="1">Active</option>
+            </InputSelect>
+        </div>
+        
+        <div class="mb-3">
+            <label class="form-label">Condition:</label>
+            <InputSelect class="form-control" @bind-Value="_product.Condition">
+                <option value="0">New</option>
+                <option value="1">Used</option>
+                <option value="2">Refurbished</option>
+            </InputSelect>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Category:</label>
+            @if (_categories == null)
+            {
+                <p>Loading categories...</p>
+            }
+            else
+            {
+                <div>
+                    @foreach (var cat in _categories)
+                    {
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="cat_@cat.Id" checked="@_product.CategoryIds.Contains(cat.Id)" @onclick="(() => ToggleCategory(cat.Id))" />
+                            <label class="form-check-label" for="cat_@cat.Id">@cat.Name</label>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+
+        <button type="submit" class="btn btn-success">Save</button>
+        <button type="button" class="btn btn-secondary" @onclick="GoBack">Cancel</button>
+
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public int? Id { get; set; }
+
+    private ProductViewModel? _product;
+    private ProductReadViewModel? _productRead;
+    private List<CategoryViewModel>? _categories;
+    private bool IsEditMode => Id.HasValue;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _categories = await ApiService.GetCategoriesAsync();
+
+        if (IsEditMode)
+        {
+            _productRead = await ApiService.GetProductByIdAsync(Id.Value);
+            _product = new ProductViewModel
+            {
+                Name = _productRead.Name,
+                Description = _productRead.Description,
+                BasePrice = _productRead.BasePrice,
+                SellTax = _productRead.SellTax,
+            };
+        }
+        else
+        {
+            _product = new ProductViewModel();
+        }
+    }
+
+    private void ToggleCategory(int id)
+    {
+        if (_product == null) return;
+
+        if (_product.CategoryIds.Contains(id))
+            _product.CategoryIds.Remove(id);
+        else
+            _product.CategoryIds.Add(id);
+    }
+
+    private async Task HandleSubmit()
+    {
+        try
+        {
+            if (IsEditMode)
+            {
+                await ApiService.UpdateProductAsync(Id.Value, _product!);
+            }
+            else
+            {
+                await ApiService.CreateProductAsync(_product!);
+            }
+
+            GoBack();
+        }
+        catch (Exception ex)
+        {
+            await JSRuntime.InvokeVoidAsync("alert", $"Error saving: {ex.Message}");
+        }
+    }
+
+    private void GoBack()
+    {
+        NavigationManager.NavigateTo("/products");
+    }
+}
