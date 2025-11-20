@@ -1,101 +1,20 @@
-# .gitignore for a .NET + Rider/Visual Studio project
-
-# Build outputs
+﻿# Visual Studio / .NET
 bin/
 obj/
-**/bin/
-**/obj/
-
-# Visual Studio
 .vs/
-*.suo
-*.user
-*.userosscache
-*.sln.docstates
-
-# JetBrains Rider
-.idea/
-*.DotSettings.user
-*.sln.iml
-*.iml
-
-# ReSharper
-_ReSharper*/
-*.ReSharper
-*.ReSharper.Cache
-
-# VS Code
 .vscode/
-
-# Publish output
-publish/
-*/publish/
-
-# NuGet
-*.nupkg
-*.snupkg
-packages/
-
-# Dotnet artifacts
-artifacts/
-project.lock.json
-project.fragment.lock.json
-
-# Entity Framework / local DB files
-*.mdf
-*.ldf
-*.db
-*.sqlite
-*.db-journal
-
-# User secrets and local settings
-secrets.json
-appsettings.*.Local.json
-local.settings.json
-
-# Logs, temp, test results, coverage
-*.log
-TestResults/
-coverage/
-*.coverage
-*.coveragexml
-*.trx
-
-# Node / frontend
-node_modules/
-npm-debug.log
-yarn-error.log
-
-# OS files
-Thumbs.db
-ehthumbs.db
-.DS_Store
-
-# Generated files
-*.generated.cs
-
-# Rider and workspace specific
-# Ignore the whole .idea directory (personal Rider settings)
+# Rider
 .idea/
 *.sln.iml
-
-# Other
-*.userprefs
-
-# Ignore published output folders inside project output (if any)
-**/publish/
-
-# Ignore zip/tar artifacts
-*.zip
-*.tar.gz
-
-# Allow checking in appsettings.json but ignore local overrides
-!appsettings.json
-appsettings.Development.json
-
-# Visual Studio 2022 specific notes:
-# - .vs/ is already ignored above
-# - Keep solution and project files tracked (.sln, .csproj)
-# - If you want to add editorconfig or shared settings, commit them explicitly
-
-# End of .gitignore
+# NuGet / packages
+packages/
+*.nupkg
+# Publish / output
+publish/
+out/
+# User / temp
+*.user
+*.suo
+*.log
+# macOS
+.DS_Store
