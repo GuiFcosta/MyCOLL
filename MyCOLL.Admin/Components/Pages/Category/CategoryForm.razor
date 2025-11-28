@@ -1,5 +1,65 @@
-<h3>CategoryForm</h3>
+@page "/categories/create"
+@page "/categories/edit/{CategoryId:int}"
+
+@using MyCOLL.Admin.Models.Entities
+@using MyCOLL.Admin.Data
+@inject ApplicationDbContext DbContext
+@inject NavigationManager NavManager
+
+
+<EditForm Model="Category" OnValidSubmit="HandleSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    
+    <div class="mb-3">
+        <label class="form-label">Nome:</label>
+        <InputText class="form-control" @bind-Value="Category.Name"/>
+        <ValidationMessage For="() => Category.Name"/>
+    </div>
+
+    <button type="submit" class="btn btn-primary" @onclick="() => GoBack()">
+        @if (Category.Id == 0)
+        { <span>Criar Categoria</span> }
+        else
+        { <span>Guardar Alterações</span> }
+    </button>
+
+    <button type="button" class="btn btn-secondary" @onclick="() => GoBack()">Cancelar</button>
+
+</EditForm>
 
 @code {
+    [Parameter] public int? CategoryId { get; set; }
+    [Parameter] public Category Category { get; set; } = new();
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
     
+    protected override async Task OnParametersSetAsync()
+    {
+        if (CategoryId.HasValue && CategoryId.Value > 0)
+        {
+            var cat = await DbContext.Categories.FindAsync(CategoryId.Value);
+            if (cat != null) Category = cat;
+        }
+        else
+        {
+            Category = new Category();
+        }
+    }
+    
+    private async Task HandleSubmit()
+    {
+        if (Category.Id == 0)
+            DbContext.Categories.Add(Category);
+        else
+            DbContext.Categories.Update(Category);
+        
+        await DbContext.SaveChangesAsync();
+        await OnValidSubmit.InvokeAsync(null);
+        GoBack();
+    }
+    
+    private void GoBack()
+    {
+        NavManager.NavigateTo("/categories");
+    }
 }

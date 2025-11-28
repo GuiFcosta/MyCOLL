@@ -1,4 +1,5 @@
 @page "/products/create"
+@page "/products/edit/{ProductId:int}"
 
 @using Microsoft.EntityFrameworkCore
 @using MyCOLL.Admin.Data
@@ -7,7 +8,7 @@
 @inject NavigationManager NavManager
 
 
-<EditForm Model="Product" OnValidSubmit="OnValidSubmit">
+<EditForm Model="Product" OnValidSubmit="HandleSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
@@ -77,21 +78,20 @@
         <InputCheckbox class="form-check-input" @bind-Value="Product.IsActive"/>
         <label class="form-check-label">Ativo (Visivel na Loja)</label>
     </div>
-
     
-
     <button type="submit" class="btn btn-primary">
         @if (Product.Id == 0)
         { <span>Criar Produto</span> }
         else
         { <span>Guardar Alterações</span> }
     </button>
-    <button type="submit" @onclick="() => GoBack()">Cancelar</button>
+    <button type="button" class="btn btn-secondary" @onclick="() => GoBack()">Cancelar</button>
 
 </EditForm>
 
 
 @code {
+    [Parameter] public int? ProductId { get; set; }
     [Parameter] public Product Product { get; set; } = new();
     [Parameter] public EventCallback OnValidSubmit { get; set; }
     
@@ -102,6 +102,32 @@
     {
         _categories = await DbContext.Categories.ToListAsync();
         _suppliers = await DbContext.Users.ToListAsync(); // Cuidado se tiveres milhares de users!
+    }
+    protected override async Task OnParametersSetAsync()
+    {
+        if (ProductId.HasValue && ProductId.Value > 0)
+        {
+            var prod = await DbContext.Products.FindAsync(ProductId.Value);
+            if (prod != null) Product = prod;
+        }
+        else
+        {
+            Product = new Product();
+        }
+    }
+    private async Task HandleSubmit()
+    {
+        if (Product.Id == 0)
+        {
+            DbContext.Products.Add(Product);
+        }
+        else
+        {
+            DbContext.Products.Update(Product);
+        }
+
+        await DbContext.SaveChangesAsync();
+        GoBack();
     }
     private void GoBack()
     {
