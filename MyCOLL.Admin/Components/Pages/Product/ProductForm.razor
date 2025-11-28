@@ -1,0 +1,110 @@
+@page "/products/create"
+
+@using Microsoft.EntityFrameworkCore
+@using MyCOLL.Admin.Data
+@using MyCOLL.Admin.Models.Entities
+@inject ApplicationDbContext DbContext
+@inject NavigationManager NavManager
+
+
+<EditForm Model="Product" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label class="form-label">Nome:</label>
+        <InputText class="form-control" @bind-Value="Product.Name" />
+        <ValidationMessage For="() => Product.Name"/>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Descrição:</label>
+        <InputTextArea class="form-control" @bind-Value="Product.Description" />
+        <ValidationMessage For="() => Product.Description"/>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Preço Base (€):</label>
+            <InputNumber class="form-control" @bind-Value="Product.BasePrice" />
+            <ValidationMessage For="() => Product.BasePrice"/>
+        </div>
+    
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Sell Tax:</label>
+            <InputNumber class="form-control" @bind-Value="Product.SellTax" />
+            <ValidationMessage For="() => Product.SellTax"/>
+        </div>    
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Stock</label>
+            <InputNumber class="form-select" @bind-Value="Product.Stock"/>
+        </div>
+        
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Categoria</label>
+            <InputSelect class="form-select" @bind-Value="Product.CategoryId">
+                <option value="">Selecione...</option>
+                @if (_categories != null)
+                {
+                    @foreach (var cat in _categories)
+                    {
+                        <option value="@cat.Id">@cat.Name</option>
+                    }
+                }
+                <option value="">Criar categoria</option>
+            </InputSelect>
+        </div>
+    </div>
+    
+    <div class="mb-3">
+        <label class="form-label">Fornecedor:</label>
+        <InputSelect class="form-control" @bind-Value="Product.SupplierId">
+            <option value="">Selecione...</option>
+            @if(_suppliers != null)
+            {
+                @foreach (var sup in _suppliers)
+                {
+                    <option value="@sup.Id">@sup.UserName</option>
+                }
+            }
+        </InputSelect>
+    </div>
+    
+    <div class="form-check mb-3">
+        <InputCheckbox class="form-check-input" @bind-Value="Product.IsActive"/>
+        <label class="form-check-label">Ativo (Visivel na Loja)</label>
+    </div>
+
+    
+
+    <button type="submit" class="btn btn-primary">
+        @if (Product.Id == 0)
+        { <span>Criar Produto</span> }
+        else
+        { <span>Guardar Alterações</span> }
+    </button>
+    <button type="submit" @onclick="() => GoBack()">Cancelar</button>
+
+</EditForm>
+
+
+@code {
+    [Parameter] public Product Product { get; set; } = new();
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+    
+    private List<Category>? _categories;
+    private List<ApplicationUser>? _suppliers;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        _categories = await DbContext.Categories.ToListAsync();
+        _suppliers = await DbContext.Users.ToListAsync(); // Cuidado se tiveres milhares de users!
+    }
+    private void GoBack()
+    {
+        NavManager.NavigateTo("/products");
+    }
+}

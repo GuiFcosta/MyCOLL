@@ -12,15 +12,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-// Configure HttpClient for API calls
-builder.Services.AddHttpClient("StoreApi", client =>
-{
-    client.BaseAddress = new Uri("https://localhost:7004/");
-});
-
-// Register ApiService
-builder.Services.AddScoped<ApiService>();
-
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
@@ -36,7 +27,7 @@ builder.Services.AddAuthentication(options =>
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
                        throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(connectionString));
+    options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -45,6 +36,16 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
     .AddDefaultTokenProviders();
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+
+// // Configure HttpClient for API calls
+// builder.Services.AddHttpClient("StoreApi", client =>
+// {
+//     client.BaseAddress = new Uri("https://localhost:7004/");
+// });
+//
+// // Register ApiService
+// builder.Services.AddScoped<ApiService>();
+
 
 var app = builder.Build();
 
