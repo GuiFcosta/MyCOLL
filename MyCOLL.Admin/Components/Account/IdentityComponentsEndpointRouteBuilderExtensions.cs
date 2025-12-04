@@ -8,7 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using MyCOLL.Admin.Components.Account.Pages;
 using MyCOLL.Admin.Components.Account.Pages.Manage;
-using MyCOLL.Admin.Data;
+
+using MyCOLL.Data.Data;
 
 namespace Microsoft.AspNetCore.Routing;
 

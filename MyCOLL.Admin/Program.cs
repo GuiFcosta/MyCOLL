@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+
 using MyCOLL.Admin.Components;
 using MyCOLL.Admin.Components.Account;
-using MyCOLL.Admin.Data;
-using MyCOLL.Admin.Services;
+
+using MyCOLL.Data.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,10 +25,10 @@ builder.Services.AddAuthentication(options =>
     })
     .AddIdentityCookies();
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
-                       throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseSqlServer(connectionString, b => b.MigrationsAssembly("MyCOLL.Data")));
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -36,16 +37,6 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
     .AddDefaultTokenProviders();
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
-
-// // Configure HttpClient for API calls
-// builder.Services.AddHttpClient("StoreApi", client =>
-// {
-//     client.BaseAddress = new Uri("https://localhost:7004/");
-// });
-//
-// // Register ApiService
-// builder.Services.AddScoped<ApiService>();
-
 
 var app = builder.Build();
 

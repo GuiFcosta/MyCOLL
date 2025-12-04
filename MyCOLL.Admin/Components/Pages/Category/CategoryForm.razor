@@ -1,10 +1,10 @@
 @page "/categories/create"
 @page "/categories/edit/{CategoryId:int}"
 
-@using System.Reflection
 @using Microsoft.EntityFrameworkCore
-@using MyCOLL.Admin.Models.Entities
-@using MyCOLL.Admin.Data
+@using MyCOLL.Data.Models.Entities
+@using MyCOLL.Data.Data
+
 @inject ApplicationDbContext DbContext
 @inject NavigationManager NavManager
 
@@ -27,9 +27,9 @@
             }
         </InputSelect>
         
-        <label class="form-label">Sub-Categorias: </label>
         @if (Category.SubCategories != null)
         {
+            <div class="form-label">Sub-Categorias: </div>
             @foreach (var subCat in Category.SubCategories)
             {
                 <div>- @subCat.Name</div>

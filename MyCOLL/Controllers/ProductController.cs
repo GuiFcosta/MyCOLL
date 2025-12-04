@@ -1,9 +1,12 @@
-using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MyCOLL.Data;
-using MyCOLL.Models.DTO.ProductDTO;
-using MyCOLL.Models.Entities;
+
+using MyCOLL.Shared.Constants;
+using MyCOLL.Data.Data;
+using MyCOLL.Data.Models.Entities;
+using MyCOLL.Repository;
 
 namespace MyCOLL.Controllers;
 
@@ -11,77 +14,51 @@ namespace MyCOLL.Controllers;
 [ApiController]
 public class ProductController : ControllerBase
 {
-    private readonly ApplicationDbContext _dbcontext;
-    private readonly IMapper _mapper;
+    private readonly ProductRepository _repository;
     
-    public ProductController(ApplicationDbContext dbcontext, IMapper mapper)
+    public ProductController(ApplicationDbContext dbcontext)
     {
-        _dbcontext = dbcontext;
-        _mapper = mapper;
+        _repository = new ProductRepository(dbcontext);
     }
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
     {
-        var products = await _dbcontext.Products
-            .Include(p => p.Categories)
-            .ToListAsync();
-        var dtoList = _mapper.Map<IEnumerable<ProductReadDto>>(products);
-        return Ok(dtoList);
+        var products = _repository.GetAllProducts();
+        return Ok(products);
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<Product>> GetById(int id)
     {
-        var product = await _dbcontext.Products.FindAsync(id);
+        var product = _repository.GetProductById(id);
         if (product == null)
             return NotFound();
-        var dto = _mapper.Map<ProductReadDto>(product);
-        return Ok(dto);
+        
+        return Ok(product);
     }
 
     [HttpPost]
-    public async Task<ActionResult<Product>> CreateProduct(ProductCreateDto dto)
+    public async Task<ActionResult<Product>> CreateProduct(Product dto)
     {
-        var product = _mapper.Map<Product>(dto);
-        
-        if (dto.CategoryIds != null && dto.CategoryIds.Any())
-        {
-            var categories = await _dbcontext.Categories
-                .Where(c => dto.CategoryIds.Contains(c.Id))
-                .ToListAsync();
-
-            product.Categories = categories;
-        }
-        
-        _dbcontext.Products.Add(product);
-        await _dbcontext.SaveChangesAsync();
-        
-        var createdDto = _mapper.Map<ProductReadDto>(product);
-        return CreatedAtAction(nameof(GetById), new { id = product.Id }, createdDto);
+        _repository.AddProduct(dto);
+        return CreatedAtAction(nameof(GetById), new { id = dto.Id }, dto);
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateProduct(int id, ProductUpdateDto dto)
+    public async Task<IActionResult> UpdateProduct(int id, Product dto)
     {
-        var product = await _dbcontext.Products.FindAsync(id);
-        if(product == null)
-            return NotFound();
+        if (id != dto.Id)
+            return BadRequest();
         
-        _mapper.Map(dto, product);
-        await _dbcontext.SaveChangesAsync();
-
+        _repository.UpdateProduct(dto);
         return NoContent();
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteProduct(int id)
     {
-        var product = await _dbcontext.Products.FindAsync(id);
-        if (product == null)
-            return NotFound();
-        _dbcontext.Products.Remove(product);
-        await _dbcontext.SaveChangesAsync();
+        _repository.DeleteProduct(id);
         return NoContent();
     }
 }

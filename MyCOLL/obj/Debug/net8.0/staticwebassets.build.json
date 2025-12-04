@@ -1,11 +1,31 @@
 {
   "Version": 1,
-  "Hash": "G7Jr5aQA7ktGrL5WseCs/6liasPXhEXFCqCq7YsK6cI=",
+  "Hash": "TXa+kGzrIV6XQjh+Cf/0l8BP36yQjPbK3UxSTAtCKlo=",
   "Source": "MyCOLL",
   "BasePath": "_content/MyCOLL",
   "Mode": "Default",
   "ManifestType": "Build",
-  "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
+  "ReferencedProjectsConfiguration": [
+    {
+      "Identity": "C:\\Users\\gbigu\\RiderProjects\\MyCOLL\\MyCOLL.Shared\\MyCOLL.Shared.csproj",
+      "Version": 2,
+      "Source": "MyCOLL.Shared",
+      "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
+      "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained",
+      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
+      "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained"
+    }
+  ],
+  "DiscoveryPatterns": [
+    {
+      "Name": "MyCOLL.Shared\\wwwroot",
+      "Source": "MyCOLL.Shared",
+      "ContentRoot": "C:\\Users\\gbigu\\RiderProjects\\MyCOLL\\MyCOLL.Shared\\wwwroot\\",
+      "BasePath": "_content/MyCOLL.Shared",
+      "Pattern": "**"
+    }
+  ],
   "Assets": []
 }

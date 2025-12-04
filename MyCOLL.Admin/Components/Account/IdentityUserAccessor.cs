@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
-using MyCOLL.Admin.Data;
+
+using MyCOLL.Data.Data;
 
 namespace MyCOLL.Admin.Components.Account;
 

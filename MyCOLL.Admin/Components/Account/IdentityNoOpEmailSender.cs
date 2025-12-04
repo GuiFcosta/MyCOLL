@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using MyCOLL.Admin.Data;
+
+using MyCOLL.Data.Data;
 
 namespace MyCOLL.Admin.Components.Account;
 
