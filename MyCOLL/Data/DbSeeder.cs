@@ -11,7 +11,7 @@ public class DbSeeder
         var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
         var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
-        string[] roleNames = { UserRoles.Admin, UserRoles.Supplier, UserRoles.Client };
+        string[] roleNames = { UserRoles.Admin, UserRoles.Employee, UserRoles.Supplier, UserRoles.Client };
 
         foreach (var roleName in roleNames)
         {

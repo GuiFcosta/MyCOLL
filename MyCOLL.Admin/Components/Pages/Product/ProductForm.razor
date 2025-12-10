@@ -1,12 +1,16 @@
 @page "/products/create"
 @page "/products/edit/{ProductId:int}"
 
+@using Microsoft.AspNetCore.Identity
 @using Microsoft.EntityFrameworkCore
 @using MyCOLL.Data.Data
 @using MyCOLL.Data.Models.Entities
+@using MyCOLL.Shared.Constants
 
 @inject ApplicationDbContext DbContext
 @inject NavigationManager NavManager
+@inject UserManager<ApplicationUser> UserManager
+
 
 
 <EditForm Model="Product" OnValidSubmit="HandleSubmit">
@@ -69,7 +73,7 @@
             {
                 @foreach (var sup in _suppliers)
                 {
-                    <option value="@sup.Id">@sup.UserName</option>
+                    <option value="@sup.Id">@sup.FullName</option>
                 }
             }
         </InputSelect>
@@ -102,7 +106,7 @@
     protected override async Task OnInitializedAsync()
     {
         _categories = await DbContext.Categories.ToListAsync();
-        _suppliers = await DbContext.Users.ToListAsync(); // Cuidado se tiveres milhares de users!
+        _suppliers = (await UserManager.GetUsersInRoleAsync(UserRoles.Supplier)).ToList(); 
     }
     protected override async Task OnParametersSetAsync()
     {
