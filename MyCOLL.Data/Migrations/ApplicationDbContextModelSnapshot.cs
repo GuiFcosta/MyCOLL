@@ -155,7 +155,7 @@ namespace MyCOLL.Admin.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("MyCOLL.Admin.Data.ApplicationUser", b =>
+            modelBuilder.Entity("MyCOLL.Data.Data.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -164,7 +164,6 @@ namespace MyCOLL.Admin.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -191,7 +190,6 @@ namespace MyCOLL.Admin.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Nif")
-                        .IsRequired()
                         .HasMaxLength(9)
                         .HasColumnType("nvarchar(9)");
 
@@ -238,7 +236,7 @@ namespace MyCOLL.Admin.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("MyCOLL.Admin.Models.Entities.Category", b =>
+            modelBuilder.Entity("MyCOLL.Data.Models.Entities.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -261,7 +259,7 @@ namespace MyCOLL.Admin.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("MyCOLL.Admin.Models.Entities.Order", b =>
+            modelBuilder.Entity("MyCOLL.Data.Models.Entities.Order", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -292,7 +290,7 @@ namespace MyCOLL.Admin.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("MyCOLL.Admin.Models.Entities.OrderItem", b =>
+            modelBuilder.Entity("MyCOLL.Data.Models.Entities.OrderItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -318,7 +316,7 @@ namespace MyCOLL.Admin.Migrations
                     b.ToTable("OrderItems");
                 });
 
-            modelBuilder.Entity("MyCOLL.Admin.Models.Entities.Product", b =>
+            modelBuilder.Entity("MyCOLL.Data.Models.Entities.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -375,7 +373,7 @@ namespace MyCOLL.Admin.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("MyCOLL.Admin.Models.Entities.ProductImage", b =>
+            modelBuilder.Entity("MyCOLL.Data.Models.Entities.ProductImage", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -412,7 +410,7 @@ namespace MyCOLL.Admin.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("MyCOLL.Admin.Data.ApplicationUser", null)
+                    b.HasOne("MyCOLL.Data.Data.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -421,7 +419,7 @@ namespace MyCOLL.Admin.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("MyCOLL.Admin.Data.ApplicationUser", null)
+                    b.HasOne("MyCOLL.Data.Data.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -436,7 +434,7 @@ namespace MyCOLL.Admin.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MyCOLL.Admin.Data.ApplicationUser", null)
+                    b.HasOne("MyCOLL.Data.Data.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -445,16 +443,16 @@ namespace MyCOLL.Admin.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("MyCOLL.Admin.Data.ApplicationUser", null)
+                    b.HasOne("MyCOLL.Data.Data.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MyCOLL.Admin.Models.Entities.Category", b =>
+            modelBuilder.Entity("MyCOLL.Data.Models.Entities.Category", b =>
                 {
-                    b.HasOne("MyCOLL.Admin.Models.Entities.Category", "ParentCategory")
+                    b.HasOne("MyCOLL.Data.Models.Entities.Category", "ParentCategory")
                         .WithMany("SubCategories")
                         .HasForeignKey("ParentCategoryId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -462,9 +460,9 @@ namespace MyCOLL.Admin.Migrations
                     b.Navigation("ParentCategory");
                 });
 
-            modelBuilder.Entity("MyCOLL.Admin.Models.Entities.Order", b =>
+            modelBuilder.Entity("MyCOLL.Data.Models.Entities.Order", b =>
                 {
-                    b.HasOne("MyCOLL.Admin.Data.ApplicationUser", "Client")
+                    b.HasOne("MyCOLL.Data.Data.ApplicationUser", "Client")
                         .WithMany("Orders")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -473,15 +471,15 @@ namespace MyCOLL.Admin.Migrations
                     b.Navigation("Client");
                 });
 
-            modelBuilder.Entity("MyCOLL.Admin.Models.Entities.OrderItem", b =>
+            modelBuilder.Entity("MyCOLL.Data.Models.Entities.OrderItem", b =>
                 {
-                    b.HasOne("MyCOLL.Admin.Models.Entities.Order", "Order")
+                    b.HasOne("MyCOLL.Data.Models.Entities.Order", "Order")
                         .WithMany("Items")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MyCOLL.Admin.Models.Entities.Product", "Product")
+                    b.HasOne("MyCOLL.Data.Models.Entities.Product", "Product")
                         .WithMany("OrderItems")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -492,15 +490,15 @@ namespace MyCOLL.Admin.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("MyCOLL.Admin.Models.Entities.Product", b =>
+            modelBuilder.Entity("MyCOLL.Data.Models.Entities.Product", b =>
                 {
-                    b.HasOne("MyCOLL.Admin.Models.Entities.Category", "Category")
+                    b.HasOne("MyCOLL.Data.Models.Entities.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MyCOLL.Admin.Data.ApplicationUser", "Supplier")
+                    b.HasOne("MyCOLL.Data.Data.ApplicationUser", "Supplier")
                         .WithMany("Products")
                         .HasForeignKey("SupplierId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -511,35 +509,35 @@ namespace MyCOLL.Admin.Migrations
                     b.Navigation("Supplier");
                 });
 
-            modelBuilder.Entity("MyCOLL.Admin.Models.Entities.ProductImage", b =>
+            modelBuilder.Entity("MyCOLL.Data.Models.Entities.ProductImage", b =>
                 {
-                    b.HasOne("MyCOLL.Admin.Models.Entities.Product", null)
+                    b.HasOne("MyCOLL.Data.Models.Entities.Product", null)
                         .WithMany("Images")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MyCOLL.Admin.Data.ApplicationUser", b =>
+            modelBuilder.Entity("MyCOLL.Data.Data.ApplicationUser", b =>
                 {
                     b.Navigation("Orders");
 
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("MyCOLL.Admin.Models.Entities.Category", b =>
+            modelBuilder.Entity("MyCOLL.Data.Models.Entities.Category", b =>
                 {
                     b.Navigation("Products");
 
                     b.Navigation("SubCategories");
                 });
 
-            modelBuilder.Entity("MyCOLL.Admin.Models.Entities.Order", b =>
+            modelBuilder.Entity("MyCOLL.Data.Models.Entities.Order", b =>
                 {
                     b.Navigation("Items");
                 });
 
-            modelBuilder.Entity("MyCOLL.Admin.Models.Entities.Product", b =>
+            modelBuilder.Entity("MyCOLL.Data.Models.Entities.Product", b =>
                 {
                     b.Navigation("Images");
 

@@ -1,10 +1,12 @@
+using Microsoft.EntityFrameworkCore;
 using MyCOLL.Data.Models.Entities;
+using MyCOLL.Interface;
 
 namespace MyCOLL.Repository;
 
 using MyCOLL.Data.Data;
 
-public class CategoryRepository
+public class CategoryRepository : ICategoryRepository
 {
     private readonly ApplicationDbContext _context;
     public CategoryRepository(ApplicationDbContext context)
@@ -12,35 +14,35 @@ public class CategoryRepository
         _context = context;
     }
 
-    public IEnumerable<Category> GetCategories()
+    public async Task<IEnumerable<Category>> GetAllCategories()
     {
-        return _context.Categories.ToList();
+        return await _context.Categories.ToListAsync();
     }
     
-    public Category? GetCategoryById(int id)
+    public async Task<Category?> GetCategoryById(int id)
     {
-        return _context.Categories.Find(id);
+        return await _context.Categories.FindAsync(id);
     }
     
-    public void AddCategory(Category category)
+    public async Task AddCategory(Category category)
     {
-        _context.Categories.Add(category);
-        _context.SaveChanges();
+        await _context.Categories.AddAsync(category);
+        await _context.SaveChangesAsync();
     }
 
-    public void UpdateCategory(Category category)
+    public async Task UpdateCategory(Category category)
     {
         _context.Categories.Update(category);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
     
-    public void DeleteCategory(int id)
+    public async Task DeleteCategory(int id)
     {
-        var category = _context.Categories.Find(id);
+        var category = await _context.Categories.FindAsync(id);
         if (category == null)
             return;
 
         _context.Categories.Remove(category);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 }

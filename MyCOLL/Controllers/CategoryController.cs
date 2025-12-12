@@ -1,3 +1,4 @@
+using MyCOLL.Interface;
 using MyCOLL.Repository;
 
 namespace MyCOLL.Controllers;
@@ -11,24 +12,24 @@ using MyCOLL.Data.Models.Entities;
 [ApiController]
 public class CategoryController : ControllerBase
 {
-    private readonly CategoryRepository _repository;
+    private readonly ICategoryRepository _repository;
     
-    public CategoryController(ApplicationDbContext dbcontext)
+    public CategoryController(ICategoryRepository repository)
     {
-        _repository = new CategoryRepository(dbcontext);
+        _repository = repository;
     }
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
     {
-        var categories = _repository.GetCategories();
+        var categories = await _repository.GetAllCategories();
         return Ok(categories);
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<Category>> GetById(int id)
     {
-        var category = _repository.GetCategoryById(id);
+        var category = await _repository.GetCategoryById(id);
         if (category == null)
             return NotFound();
         
@@ -38,7 +39,7 @@ public class CategoryController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Category>> CreateCategory(Category dto)
     {
-        _repository.AddCategory(dto);
+        await _repository.AddCategory(dto);
         return CreatedAtAction(nameof(GetById), new { id = dto.Id }, dto);
     }
 
@@ -48,7 +49,7 @@ public class CategoryController : ControllerBase
         if (id != dto.Id)
             return BadRequest();
         
-        _repository.UpdateCategory(dto);
+        await _repository.UpdateCategory(dto);
         return NoContent();
     }
 
@@ -56,7 +57,7 @@ public class CategoryController : ControllerBase
     
     public async Task<IActionResult> DeleteCategory(int id)
     {
-        _repository.DeleteCategory(id);
+        await _repository.DeleteCategory(id);
         return NoContent();
     }
 }

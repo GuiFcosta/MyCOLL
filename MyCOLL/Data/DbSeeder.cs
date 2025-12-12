@@ -34,7 +34,9 @@ public class DbSeeder
                 Email = adminEmail,
                 FullName = "Administrador do Sistema",
                 EmailConfirmed = true,
-                StateAccount = StateAccount.Active
+                StateAccount = StateAccount.Active,
+                Nif = "000000000",
+                Address = "Sede da Empresa"
             };
 
             // Create the admin user with a default password

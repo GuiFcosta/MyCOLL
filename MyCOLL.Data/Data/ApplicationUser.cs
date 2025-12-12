@@ -15,10 +15,10 @@ public class ApplicationUser : IdentityUser
     [Required, StringLength(50)]
     public string FullName { get; set; } = string.Empty;
     
-    [Required, StringLength(9)]
+    [StringLength(9)]
     public string? Nif { get; set; }
     
-    [Required, StringLength(100)]
+    [StringLength(100)]
     public string? Address { get; set; }
     
     [Required]
