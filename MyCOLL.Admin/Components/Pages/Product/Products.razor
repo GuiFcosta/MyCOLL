@@ -6,7 +6,7 @@
 
 @inject IJSRuntime JsRuntime
 @inject NavigationManager NavManager
-@inject ApplicationDbContext DbContext
+@inject IDbContextFactory<ApplicationDbContext> DbFactory
 
 <PageTitle>Lista de Produtos</PageTitle>
 
@@ -72,7 +72,9 @@ else
     
     private async Task LoadProducts()
     {
-        _productsList = await DbContext.Products
+        await using var context = DbFactory.CreateDbContext();
+
+        _productsList = await context.Products
             .Include(p => p.Category)
             .Include(p => p.Supplier)
             .ToListAsync();
@@ -91,6 +93,7 @@ else
     // delete
     private async Task DeleteProduct(int id)
     {
+        await using var context = DbFactory.CreateDbContext();
         var product = _productsList?.FirstOrDefault(p => p.Id == id);
         if (product == null)
             return;
@@ -105,8 +108,8 @@ else
 
         if (confirmed)
         {
-            DbContext.Products.Remove(product);
-            await DbContext.SaveChangesAsync();
+            context.Products.Remove(product);
+            await context.SaveChangesAsync();
             _productsList?.Remove(product);
         }
     }

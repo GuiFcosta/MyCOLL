@@ -3,8 +3,9 @@
 @using Microsoft.EntityFrameworkCore
 @using MyCOLL.Data.Models.Entities
 @using MyCOLL.Data.Data
+@using MyCOLL.Shared.Constants
 
-
+@inject IDbContextFactory<ApplicationDbContext> DbFactory
 @inject IJSRuntime JsRuntime
 @inject NavigationManager NavManager
 @inject ApplicationDbContext DbContext
@@ -12,6 +13,18 @@
 <PageTitle>Lista de Pedidos</PageTitle>
 
 <h3>Gestão de Pedidos </h3>
+
+<div class="row mb-3">
+    <div class="col-md-3">
+        <select class="form-select" @onchange="FilterByStatus">
+            <option value="">Todos os Estados</option>
+            <option value="@OrderStatus.Pending">Pendentes</option>
+            <option value="@OrderStatus.Paid">Pagos</option>
+            <option value="@OrderStatus.Shipped">Enviados</option>
+            <option value="@OrderStatus.Cancelled">Cancelados</option>
+        </select>
+    </div>
+</div>
 
 @if(_ordersList == null)
 {
@@ -23,12 +36,12 @@ else if (_ordersList.Count == 0)
 }
 else
 {
-    <table class="table">
-        <thead>
+    <table class="table table-hover align-middle">
+        <thead class="table-light">
             <tr>
                 <th>Id do Pedido</th>
-                <th>Cliente</th>
                 <th>Data do Pedido</th>
+                <th>Cliente</th>
                 <th>Total (€)</th>
                 <th>Status</th>
                 <th>Ações</th>
@@ -39,12 +52,25 @@ else
             {
                 <tr>
                     <td>@order.Id</td>
-                    <td>@order.Client</td>
                     <td>@order.OrderDate.ToString("g")</td>
-                    <td>@order.TotalAmount.ToString("C")</td>
-                    <td>@order.Status</td>
                     <td>
-                        <button class="btn btn-sm btn-info" @onclick="() => ViewOrderDetails(order.Id)">Ver Detalhes</button>
+                        @if (order.Client != null)
+                        {
+                            <span>@order.Client.FullName <br/> <small class="text-muted">@order.Client.Email</small></span>
+                        }
+                        else
+                        {
+                            <span class="text-danger">Desconhecido</span>
+                        }
+                    </td>
+                    <td>@order.TotalAmount.ToString("C")</td>
+                    <td>
+                        <span class="badge @GetStatusBadge(order.Status)">@order.Status</span>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" @onclick="() => ManageOrder(order.Id)">
+                            Gerir / Detalhes
+                        </button>
                     </td>
                 </tr>
             }
@@ -54,17 +80,44 @@ else
 
 @code {
     private List<Order>? _ordersList;
+    private List<Order>? _orders;
     
     protected override async Task OnInitializedAsync()
     {
-        _ordersList = await DbContext.Orders
+        await using var context = DbFactory.CreateDbContext();
+
+        _orders = await context.Orders
             .Include(o => o.Client)
             .OrderByDescending(o => o.OrderDate)
             .ToListAsync();
+        _ordersList = _orders;
+    }
+
+    private void FilterByStatus(ChangeEventArgs e)
+    {
+        var status = e.Value?.ToString();
+        if (string.IsNullOrEmpty(status))
+        {
+            _ordersList = _orders;
+        }
+        else
+        {
+            _ordersList = _orders?.Where(o => o.Status == status).ToList();
+        }
     }
     
-    private void ViewOrderDetails(int orderId)
+    private void ManageOrder(int orderId)
     {
-        NavManager.NavigateTo($"/orders/details/{orderId}");
+        NavManager.NavigateTo($"/orders/manage/{orderId}");
     }
+    
+    private static string GetStatusBadge(string status) => status switch
+    {
+        OrderStatus.Pending => "bg-warning text-dark",
+        OrderStatus.Paid => "bg-info text-dark",
+        OrderStatus.Shipped => "bg-primary",
+        OrderStatus.Delivered => "bg-success",
+        OrderStatus.Cancelled => "bg-danger",
+        _ => "bg-secondary"
+    };
 }

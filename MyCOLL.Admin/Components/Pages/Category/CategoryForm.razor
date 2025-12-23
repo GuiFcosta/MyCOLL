@@ -6,6 +6,7 @@
 @using MyCOLL.Data.Data
 
 @inject ApplicationDbContext DbContext
+@inject IDbContextFactory<ApplicationDbContext> DbFactory
 @inject NavigationManager NavManager
 
 
@@ -57,9 +58,11 @@
     
     protected override async Task OnParametersSetAsync()
     {
+        await using var context = DbFactory.CreateDbContext();
+        
         if (CategoryId.HasValue && CategoryId.Value > 0)
         {
-            var cat = await DbContext.Categories.FindAsync(CategoryId.Value);
+            var cat = await context.Categories.FindAsync(CategoryId.Value);
             if (cat != null) Category = cat;
         }
         else
@@ -67,7 +70,7 @@
             Category = new Category();
         }
         
-        AllCategories = await DbContext.Categories
+        AllCategories = await context.Categories
             .Where(c => c.Id != Category.Id)
             .ToListAsync();
         
@@ -75,16 +78,17 @@
     
     private async Task HandleSubmit()
     {
+        await using var context = DbFactory.CreateDbContext();
         if (Category.Id == 0)
         {
-            DbContext.Categories.Add(Category);
+            context.Categories.Add(Category);
         }
         else
         {
-            DbContext.Categories.Update(Category);
+            context.Categories.Update(Category);
         }
         
-        await DbContext.SaveChangesAsync();
+        await context.SaveChangesAsync();
         GoBack();
     }
     

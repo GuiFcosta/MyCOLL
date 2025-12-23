@@ -88,7 +88,7 @@ else
         // Remove as que foram desmarcadas
         var toRemove = currentRoles.Except(_userRoles);
         await UserManager.RemoveFromRolesAsync(_user, toRemove);
-
+        
         NavManager.NavigateTo("/users");
     }
 }

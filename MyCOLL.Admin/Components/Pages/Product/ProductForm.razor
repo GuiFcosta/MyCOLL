@@ -8,6 +8,7 @@
 @using MyCOLL.Shared.Constants
 
 @inject ApplicationDbContext DbContext
+@inject IDbContextFactory<ApplicationDbContext> DbFactory
 @inject NavigationManager NavManager
 @inject UserManager<ApplicationUser> UserManager
 
@@ -105,14 +106,18 @@
     
     protected override async Task OnInitializedAsync()
     {
-        _categories = await DbContext.Categories.ToListAsync();
+        await using var context = DbFactory.CreateDbContext();
+
+        _categories = await context.Categories.ToListAsync();
         _suppliers = (await UserManager.GetUsersInRoleAsync(UserRoles.Supplier)).ToList(); 
     }
     protected override async Task OnParametersSetAsync()
     {
+        await using var context = DbFactory.CreateDbContext();
+
         if (ProductId.HasValue && ProductId.Value > 0)
         {
-            var prod = await DbContext.Products.FindAsync(ProductId.Value);
+            var prod = await context.Products.FindAsync(ProductId.Value);
             if (prod != null) Product = prod;
         }
         else
@@ -122,16 +127,18 @@
     }
     private async Task HandleSubmit()
     {
+        await using var context = DbFactory.CreateDbContext();
+
         if (Product.Id == 0)
         {
-            DbContext.Products.Add(Product);
+            context.Products.Add(Product);
         }
         else
         {
-            DbContext.Products.Update(Product);
+            context.Products.Update(Product);
         }
 
-        await DbContext.SaveChangesAsync();
+        await context.SaveChangesAsync();
         GoBack();
     }
     private void GoBack()
