@@ -1,23 +1,70 @@
 {
   "Version": 1,
-  "Hash": "OmDyMOU6vB/4qXuEEHQAo5cl8TBHT1k8c7l7cXa837I=",
+  "Hash": "FTtVOJ8fAL6xPPY80HV7tARfjHRF1KdJGB/QtOOEXLo=",
   "Source": "MyCOLL",
   "BasePath": "_content/MyCOLL",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [
     {
-      "Identity": "C:\\Users\\rodri\\RiderProjects\\MyCOLL\\MyCOLL.Shared\\MyCOLL.Shared.csproj",
+      "Identity": "C:\\Users\\gbigu\\RiderProjects\\MyCOLL\\MyCOLL.Shared\\MyCOLL.Shared.csproj",
       "Version": 2,
       "Source": "MyCOLL.Shared",
       "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
-      "AdditionalPublishProperties": "",
+      "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
       "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained",
       "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
-      "AdditionalBuildProperties": "",
+      "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
       "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained"
     }
   ],
-  "DiscoveryPatterns": [],
-  "Assets": []
+  "DiscoveryPatterns": [
+    {
+      "Name": "MyCOLL.Shared\\wwwroot",
+      "Source": "MyCOLL.Shared",
+      "ContentRoot": "C:\\Users\\gbigu\\RiderProjects\\MyCOLL\\MyCOLL.Shared\\wwwroot\\",
+      "BasePath": "_content/MyCOLL.Shared",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\gbigu\\RiderProjects\\MyCOLL\\MyCOLL.Shared\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\MyCOLL.Shared.bundle.scp.css",
+      "SourceId": "MyCOLL.Shared",
+      "SourceType": "Project",
+      "ContentRoot": "C:\\Users\\gbigu\\RiderProjects\\MyCOLL\\MyCOLL.Shared\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\",
+      "BasePath": "_content/MyCOLL.Shared",
+      "RelativePath": "MyCOLL.Shared.bundle.scp.css",
+      "AssetKind": "All",
+      "AssetMode": "Reference",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "ScopedCss",
+      "AssetTraitValue": "ProjectBundle",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\gbigu\\RiderProjects\\MyCOLL\\MyCOLL.Shared\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\MyCOLL.Shared.bundle.scp.css"
+    },
+    {
+      "Identity": "C:\\Users\\gbigu\\RiderProjects\\MyCOLL\\MyCOLL\\obj\\Debug\\net8.0\\scopedcss\\bundle\\MyCOLL.styles.css",
+      "SourceId": "MyCOLL",
+      "SourceType": "Computed",
+      "ContentRoot": "C:\\Users\\gbigu\\RiderProjects\\MyCOLL\\MyCOLL\\obj\\Debug\\net8.0\\scopedcss\\bundle\\",
+      "BasePath": "_content/MyCOLL",
+      "RelativePath": "MyCOLL.styles.css",
+      "AssetKind": "All",
+      "AssetMode": "CurrentProject",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "ScopedCss",
+      "AssetTraitValue": "ApplicationBundle",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\gbigu\\RiderProjects\\MyCOLL\\MyCOLL\\obj\\Debug\\net8.0\\scopedcss\\bundle\\MyCOLL.styles.css"
+    }
+  ]
 }

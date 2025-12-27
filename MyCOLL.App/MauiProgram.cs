@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.Extensions.Logging;
+using MyCOLL.App.Services;
 
 namespace MyCOLL.App;
 
@@ -9,10 +11,35 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
-            .ConfigureFonts(fonts => { fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular"); });
+            .ConfigureFonts(fonts =>
+            {
+                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+            });
 
         builder.Services.AddMauiBlazorWebView();
+        builder.Services.AddScoped(sp =>
+        {
+            // Endereço base da API
+            string baseAddress;
 
+            if (DeviceInfo.Platform == DevicePlatform.Android)
+            {
+                // 10.0.2.2 é o "localhost" do PC visto de dentro do emulador Android
+                // ATENÇÃO: Verifique a porta da sua API (ex: 7000, 5000, 7234)
+                baseAddress = "http://10.0.2.2:5000/"; 
+            }
+            else
+            {
+                // Para Windows/Mac usa localhost normal
+                baseAddress = "https://localhost:7004/"; 
+            }
+
+            return new HttpClient { BaseAddress = new Uri(baseAddress) };
+        });
+        builder.Services.AddAuthorizationCore();
+        builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
+        
+        
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();
         builder.Logging.AddDebug();
