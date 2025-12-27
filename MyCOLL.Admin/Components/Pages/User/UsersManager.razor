@@ -27,7 +27,7 @@ else
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" 
                        checked="@_userRoles.Contains(role.Name)" 
-                       @onchange="@(e => UpdateRoleSelection(role.Name, e))"
+                       @onchange="@(e => UpdateRoleSelection(role.Name, e.Value))"
                        id="@role.Id">
                 <label class="form-check-label" for="@role.Id">
                     @role.Name
