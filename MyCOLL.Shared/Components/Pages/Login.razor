@@ -1,5 +1,4 @@
 @page "/login"
-@using Microsoft.AspNetCore.Components.Authorization
 @using MyCOLL.Shared.Interface
 @using MyCOLL.Shared.Models.Dto
 
@@ -65,7 +64,7 @@
         try
         {
             // 1. Chama a API
-            var response = await Http.PostAsJsonAsync("api/Auth/login", _loginModel);
+            var response = await Http.PostAsJsonAsync("api/auth/login", _loginModel);
 
             if (response.IsSuccessStatusCode)
             {
