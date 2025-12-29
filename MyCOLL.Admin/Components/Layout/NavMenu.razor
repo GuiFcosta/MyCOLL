@@ -32,26 +32,31 @@
                         <span class="bi bi-box" aria-hidden="true"></span> Produtos
                     </NavLink>
                 </div>
+        
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" href="categories">
                         <span class="bi bi-box" aria-hidden="true"></span> Categorias
                     </NavLink>
                 </div>
+        
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" href="orders">
                         <span class="bi bi-box" aria-hidden="true"></span> Pedidos
                     </NavLink>
                 </div>
+                
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" href="users">
                         <span class="bi bi-box" aria-hidden="true"></span> Utilizadores
                     </NavLink>
                 </div>
+
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" href="Account/Manage">
                         <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> @context.User.Identity?.Name
                     </NavLink>
                 </div>
+
                 <div class="nav-item px-3">
                     <form action="Account/Logout" method="post">
                         <AntiforgeryToken/>

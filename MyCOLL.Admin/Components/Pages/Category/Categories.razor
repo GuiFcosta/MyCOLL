@@ -4,68 +4,73 @@
 @using MyCOLL.Data.Models.Entities
 @using MyCOLL.Data.Data
 
-
 @inject IJSRuntime JsRuntime
 @inject NavigationManager NavManager
 @inject IDbContextFactory<ApplicationDbContext> DbFactory
 
 <PageTitle>Lista de Categorias</PageTitle>
 
-<h3>Gestão de Categorias</h3>
-
-<div>
-    <button class="btn btn-primary" @onclick="CreateCategory">Criar Categoria</button>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Categorias</h3>
+    <a href="/categories/create" class="btn btn-success">
+        <i class="bi bi-plus-lg"></i> Nova Categoria
+    </a>
 </div>
 
-@if(_parentCategories == null)
+<div class="input-group mb-4 shadow-sm" style="max-width: 400px;">
+    <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+    <input type="text" class="form-control border-start-0" placeholder="Pesquisar categoria..." 
+           @bind="_searchText" @bind:event="oninput" @onkeyup="LoadCategories" />
+</div>
+
+@if(_categories == null)
 {
     <p><em>Carregando categorias...</em></p>
 }
-else if (_parentCategories.Count == 0)
+else if (_categories.Count == 0)
 {
     <p><em>Nenhuma categoria encontrada.</em></p>
 }
 else
 {
-    <table class="table">
+    <table class="table table-hover">
         <thead>
             <tr>
                 <th>Nome</th>
+                <th>Categoria Pai</th>
                 <th>Ações</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var category in _parentCategories)
-            {
-                <tr>
-                    <td>@category.Name</td>
-                    <td>
-                        <button class="btn btn-sm btn-info" @onclick="() => EditCategory(category.Id)">Editar</button>
-                        <button class="btn btn-sm btn-danger" @onclick="() => DeleteCategory(category.Id)">Apagar</button>
-                    </td>
-                </tr>
-                
-                @if (_subCategoriesMap.ContainsKey(category.Id))
-                {
-                    foreach (var subCat in _subCategoriesMap[category.Id])
+        @foreach (var category in _categories)
+        {
+            <tr>
+                <td>
+                    <span class="fw-bold">@category.Name</span>
+                </td>
+                <td>
+                    @if (category.ParentCategory != null)
                     {
-                        <tr>
-                            <td style="padding-left: 2rem;">@subCat.Name</td>
-                            <td>
-                                <button class="btn btn-sm btn-info" @onclick="() => EditCategory(subCat.Id)">Editar</button>
-                                <button class="btn btn-sm btn-danger" @onclick="() => DeleteCategory(subCat.Id)">Apagar</button>
-                            </td>
-                        </tr>
+                        <span class="badge bg-secondary">@category.ParentCategory.Name</span>
                     }
-                }
-            }
+                    else
+                    {
+                        <span class="text-muted small">Raiz</span>
+                    }
+                </td>
+                <td>
+                    <a href="/categories/edit/@category.Id" class="btn btn-sm btn-primary">Editar</a>
+                    <button class="btn btn-sm btn-danger" @onclick="() => DeleteCategory(category.Id)">Apagar</button>
+                </td>
+            </tr>
+        }
         </tbody>
     </table>
 }
 
 @code {
-    private List<Category>? _parentCategories;
-    private Dictionary<int, List<Category>> _subCategoriesMap = new();
+    private List<Category>? _categories;
+    private string _searchText = string.Empty;
     
     protected override async Task OnInitializedAsync()
     {
@@ -74,29 +79,24 @@ else
     private async Task LoadCategories()
     {
         await using var context = DbFactory.CreateDbContext();
+        
+        var query = context.Categories
+            .Include(c => c.ParentCategory)
+            .AsQueryable();
         var all = await context.Categories
             .ToListAsync();
         
-        _parentCategories = all
-            .OrderBy(c => c.Name)
-            .Where(c => c.ParentCategoryId == null)
-            .ToList();
-        
-        _subCategoriesMap = all
-            .Where(c => c.ParentCategoryId != null)
-            .GroupBy(c => c.ParentCategoryId!.Value)
-            .ToDictionary(g => g.Key, g => g.ToList());
-    }
+        if (!string.IsNullOrWhiteSpace(_searchText))
+        {
+            query = query.Where(c => c.Name.Contains(_searchText));
+        }
 
-    private void CreateCategory()
-    {
-        NavManager.NavigateTo("/categories/create");
+        // Ordenar: Raiz primeiro, depois alfabético
+        query = query.OrderBy(c => c.ParentCategoryId).ThenBy(c => c.Name);
+
+        _categories = await query.ToListAsync();
     }
     
-    private void EditCategory(int categoryId)
-    {
-        NavManager.NavigateTo($"/categories/edit/{categoryId}");
-    }
     private async Task DeleteCategory(int categoryId)
     {
         await using var context = DbFactory.CreateDbContext();
