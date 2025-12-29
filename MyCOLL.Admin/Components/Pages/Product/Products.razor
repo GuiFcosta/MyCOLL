@@ -78,7 +78,7 @@ else
             {
                 <tr>
                     <td>
-                        @if (product.Images != null && product.Images.Any())
+                        @if (product.Images.Any())
                         {
                             <img src="@product.Images.First().ImageUrl" width="50" height="50" style="object-fit:cover" class="rounded"  alt=""/>
                         }
@@ -136,6 +136,7 @@ else
         var query = context.Products
             .Include(p => p.Category)
             .Include(p => p.Supplier)
+            .Include(p => p.Images)
             .AsQueryable();
 
         // 1. Filtrar por Nome
@@ -167,8 +168,14 @@ else
     {
         if (!await JsRuntime.InvokeAsync<bool>("confirm", $"Tem a certeza que deseja apagar '{product.Name}'?"))
             return;
+        
+        if(product.OrderItems != null && product.OrderItems.Any())
+        {
+            await JsRuntime.InvokeVoidAsync("alert", "Não é possível apagar: Este produto está associado a encomendas.");
+            return;
+        }
 
-        using var context = DbFactory.CreateDbContext();
+        await using var context = DbFactory.CreateDbContext();
         context.Products.Remove(product);
         await context.SaveChangesAsync();
         await LoadProducts();

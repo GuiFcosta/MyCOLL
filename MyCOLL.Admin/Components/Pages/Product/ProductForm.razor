@@ -6,11 +6,12 @@
 @using MyCOLL.Data.Data
 @using MyCOLL.Data.Models.Entities
 @using MyCOLL.Shared.Constants
+@using Microsoft.AspNetCore.Hosting
 
-@inject ApplicationDbContext DbContext
 @inject IDbContextFactory<ApplicationDbContext> DbFactory
 @inject NavigationManager NavManager
 @inject UserManager<ApplicationUser> UserManager
+@inject IWebHostEnvironment Env
 
 <EditForm Model="Product" OnValidSubmit="HandleSubmit">
     <DataAnnotationsValidator />
@@ -83,6 +84,23 @@
         <label class="form-check-label">Ativo (Visivel na Loja)</label>
     </div>
     
+    <div class="mb-3">
+        <label class="form-label">Imagens do Produto:</label>
+        <InputFile OnChange="OnInputFileChange" multiple class="form-control"/>
+    </div>
+
+    <div class="d-flex flex-wrap">
+        @foreach (var image in Product.Images)
+        {
+            <div class="m-2 position-relative">
+                <img src="@image.ImageUrl" style="max-width: 150px; max-height: 150px;"  alt=""/>
+                <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0" @onclick="() => RemoveImage(image)">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+        }
+    </div>
+    
     <button type="submit" class="btn btn-primary">
         @if (Product.Id == 0)
         { <span>Criar Produto</span> }
@@ -101,7 +119,8 @@
     
     private List<Category>? _categories;
     private List<ApplicationUser>? _suppliers;
-    
+    private IReadOnlyList<IBrowserFile> _selectedFiles = new List<IBrowserFile>();
+
     protected override async Task OnInitializedAsync()
     {
         await using var context = DbFactory.CreateDbContext();
@@ -115,7 +134,9 @@
 
         if (ProductId.HasValue && ProductId.Value > 0)
         {
-            var prod = await context.Products.FindAsync(ProductId.Value);
+            var prod = await context.Products
+                .Include(p => p.Images)
+                .FirstOrDefaultAsync(p => p.Id == ProductId.Value);
             if (prod != null) Product = prod;
         }
         else
@@ -126,6 +147,25 @@
     private async Task HandleSubmit()
     {
         await using var context = DbFactory.CreateDbContext();
+
+        var uploadPath = Path.Combine(Env.WebRootPath, "product-images");
+        Directory.CreateDirectory(uploadPath);
+
+        foreach (var file in _selectedFiles)
+        {
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.Name)}";
+            var filePath = Path.Combine(uploadPath, fileName);
+            
+            await using var stream = file.OpenReadStream(5120000); // 5MB max file size
+            await using var fs = new FileStream(filePath, FileMode.Create);
+            await stream.CopyToAsync(fs);
+
+            Product.Images.Add(new ProductImage
+            {
+                ImageUrl = $"/product-images/{fileName}",
+                IsPrimary = !Product.Images.Any() 
+            });
+        }
 
         if (Product.Id == 0)
         {
@@ -139,6 +179,30 @@
         await context.SaveChangesAsync();
         GoBack();
     }
+
+    private void OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        _selectedFiles = e.GetMultipleFiles();
+    }
+
+    private async Task RemoveImage(ProductImage image)
+    {
+        Product.Images.Remove(image);
+
+        if (image.Id > 0)
+        {
+            await using var context = DbFactory.CreateDbContext();
+            context.Remove(image);
+            await context.SaveChangesAsync();
+        }
+
+        var imagePath = Path.Combine(Env.WebRootPath, image.ImageUrl.TrimStart('/'));
+        if (File.Exists(imagePath))
+        {
+            File.Delete(imagePath);
+        }
+    }
+
     private void GoBack()
     {
         NavManager.NavigateTo("/products");
