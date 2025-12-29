@@ -5,7 +5,7 @@
 
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">MyCOLL Loja</a>
+        <a class="navbar-brand" href="">MyCOLL</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -14,6 +14,7 @@
 
 <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
     <nav class="flex-column">
+        
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
                 <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Início
@@ -45,12 +46,12 @@
                     </div>
                     <div class="nav-item px-3">
                         <NavLink class="nav-link" href="orders/history">
-                            <span class="bi bi-clock-history-nav-menu" aria-hidden="true"></span> Minhas Compras
+                            <span class="bi bi-clock-history-nav-menu" aria-hidden="true"></span> Histórico
                         </NavLink>
                     </div>
                 }
 
-                <div class="nav-item px-3 mt-4">
+                <div class="nav-item px-3">
                     <button class="nav-link btn btn-link text-danger" @onclick="Logout">
                         <span class="bi bi-box-arrow-right-nav-menu" aria-hidden="true"></span> Sair
                     </button>
@@ -59,12 +60,13 @@
             
             <NotAuthorized>
                 <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="login">
-                        <span class="bi bi-person-circle-nav-menu" aria-hidden="true"></span> Entrar / Registar
+                    <NavLink class="nav-link" href="/auth/login">
+                        <span class="bi bi-person-circle-nav-menu" aria-hidden="true"></span> Entrar
                     </NavLink>
                 </div>
             </NotAuthorized>
         </AuthorizeView>
+
     </nav>
 </div>
 
@@ -82,7 +84,7 @@
         if (AuthStateProvider is IAuthService authService)
         {
             await authService.Logout();
-            NavManager.NavigateTo("/login");
+            NavManager.NavigateTo("/auth/login");
         }
     }
 }

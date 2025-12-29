@@ -27,7 +27,7 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterDto dto)
     {
-        if(dto.Role != "Client" && dto.Role != "Supplier")
+        if(dto.Role != "Cliente" && dto.Role != "Fornecedor")
             return BadRequest(new { Message = "Invalid role specified" });
         
         var user = new ApplicationUser

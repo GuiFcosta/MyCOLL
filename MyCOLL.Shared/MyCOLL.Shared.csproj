@@ -18,9 +18,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Components\Pages\Auth\" />
       <Folder Include="Models\" />
       <Folder Include="wwwroot\css\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AndroidAsset Include="wwwroot\bootstrap\bootstrap.min.css" />
+      <AndroidAsset Include="wwwroot\bootstrap\bootstrap.min.css.map" />
     </ItemGroup>
 
 </Project>
