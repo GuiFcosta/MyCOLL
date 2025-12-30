@@ -168,13 +168,9 @@
         }
 
         if (Product.Id == 0)
-        {
-            context.Products.Add(Product);
-        }
+        { context.Products.Add(Product); }
         else
-        {
-            context.Products.Update(Product);
-        }
+        { context.Products.Update(Product); }
 
         await context.SaveChangesAsync();
         GoBack();

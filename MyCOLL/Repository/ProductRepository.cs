@@ -36,7 +36,7 @@ public class ProductRepository : IProductRepository
     
     public async Task AddProduct(Product product)
     {
-        await _context.Products.AddAsync(product);
+        _context.Products.Add(product);
         await _context.SaveChangesAsync();
     }
     

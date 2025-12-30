@@ -4,7 +4,7 @@
              xmlns:rcl="clr-namespace:MyCOLL.Shared;assembly=MyCOLL.Shared"
              x:Class="MyCOLL.App.MainPage">
 
-    <BlazorWebView x:Name="BlazorWebView" HostPage="wwwroot/index.html">
+    <BlazorWebView HostPage="wwwroot/index.html">
         <BlazorWebView.RootComponents>
             <RootComponent Selector="#app" ComponentType="{x:Type rcl:Components.Routes}" />
         </BlazorWebView.RootComponents>

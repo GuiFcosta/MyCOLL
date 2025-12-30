@@ -1,3 +1,119 @@
 ﻿@page "/"
+@using MyCOLL.Shared.Models.Dto
 
-<h1>My Collection</h1>
+@inject HttpClient Http
+@inject NavigationManager NavManager
+
+<PageTitle>Início - MyCOLL Loja</PageTitle>
+
+<div class="p-5 mb-4 bg-light rounded-3 shadow-sm text-center">
+    <div class="container-fluid py-3">
+        <h1 class="display-5 fw-bold">Bem-vindo à MyCOLL</h1>
+        <p class="col-md-8 fs-4 mx-auto">Encontre os melhores produtos aos melhores preços.</p>
+        
+        <AuthorizeView>
+            <NotAuthorized>
+                <a href="/register" class="btn btn-primary btn-lg mt-3">Crie sua conta agora</a>
+            </NotAuthorized>
+            <Authorized>
+                <p class="text-success mt-2">Olá, @context.User.Identity?.Name! Boas compras.</p>
+            </Authorized>
+        </AuthorizeView>
+    </div>
+</div>
+
+<div class="container">
+    <h3 class="mb-4 border-bottom pb-2">Destaques da Loja</h3>
+
+    @if (_products == null)
+    {
+        <div class="d-flex justify-content-center my-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">A carregar...</span>
+            </div>
+        </div>
+    }
+    else if (!_products.Any())
+    {
+        <div class="alert alert-info text-center">
+            Nenhum produto disponível no momento.
+        </div>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+            @foreach (var product in _products)
+            {
+                <div class="col">
+                    <div class="card h-100 shadow-sm border-0 product-card">
+                        <div class="img-container" style="height: 200px; overflow: hidden; background-color: #f8f9fa;">
+                            @if (product.Images != null && product.Images.Any())
+                            {
+                                <img src="@product.Images.First().ImageUrl" class="card-img-top h-100 w-100" style="object-fit: contain; padding: 10px;" alt="@product.Name">
+                            }
+                            else
+                            {
+                                <div class="d-flex align-items-center justify-content-center h-100 text-muted">
+                                    <i class="bi bi-image fs-1"></i>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title text-truncate" title="@product.Name">@product.Name</h5>
+                            <p class="card-text text-muted small">@product.CategoryName</p>
+                            
+                            <div class="mt-auto">
+                                <h4 class="text-primary fw-bold">@product.BasePrice.ToString("C")</h4>
+                            </div>
+                        </div>
+
+                        <div class="card-footer bg-white border-top-0 d-grid gap-2 pb-3">
+                            <AuthorizeView>
+                                <Authorized>
+                                    <button class="btn btn-success" @onclick="() => AddToCart(product)">
+                                        <i class="bi bi-cart-plus"></i> Adicionar
+                                    </button>
+                                </Authorized>
+                                <NotAuthorized>
+                                    <a href="/login" class="btn btn-outline-primary">
+                                        Login para Comprar
+                                    </a>
+                                </NotAuthorized>
+                            </AuthorizeView>
+                            
+                            <a href="/products/details/@product.Id" class="btn btn-sm btn-link text-secondary">
+                                Ver Detalhes
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private ICollection<ProductDto>? _products;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            _products = await Http.GetFromJsonAsync<List<ProductDto>>("api/products");
+            
+            _products = _products?.Where(p => p.IsActive).ToList(); 
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao carregar produtos: {ex.Message}");
+            _products = new List<ProductDto>();
+        }
+    }
+
+    private void AddToCart(ProductDto product)
+    {
+        // Lógica futura de carrinho
+        NavManager.NavigateTo("/cart");
+    }
+}

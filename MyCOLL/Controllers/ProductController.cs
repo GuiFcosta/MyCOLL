@@ -11,6 +11,7 @@ namespace MyCOLL.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class ProductController : ControllerBase
 {
     private readonly IProductRepository _repository;    
@@ -20,13 +21,16 @@ public class ProductController : ControllerBase
         _repository = repository;
     }
 
+    // GET: api/products
     [HttpGet]
+    [AllowAnonymous]
     public async Task<ActionResult<IEnumerable<Product>>> GetClientProducts()
     {
         var products = await _repository.GetClientProducts();
         return Ok(products);
     }
     
+    // GET: api/products/sup
     [HttpGet("sup")]
     [Authorize(Roles = UserRoles.Supplier)]
     public async Task<ActionResult<IEnumerable<Product>>> GetSupplierProducts()
@@ -36,6 +40,7 @@ public class ProductController : ControllerBase
         return Ok(products);
     }
 
+    // GET: api/products/5
     [HttpGet("{id}")]
     [Authorize(Roles = UserRoles.Supplier)]
     public async Task<ActionResult<Product>> GetById(int id)
@@ -48,6 +53,7 @@ public class ProductController : ControllerBase
         return Ok(product);
     }
 
+    // POST: api/products
     [HttpPost]
     [Authorize(Roles = UserRoles.Supplier)]
     public async Task<ActionResult<Product>> CreateProduct(Product dto)
@@ -59,6 +65,7 @@ public class ProductController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = dto.Id }, dto);
     }
 
+    // PUT: api/products/5
     [HttpPut("{id}")]
     [Authorize(Roles = UserRoles.Supplier)]
     public async Task<IActionResult> UpdateProduct(int id, Product dto)
@@ -75,6 +82,7 @@ public class ProductController : ControllerBase
         return NoContent();
     }
 
+    // DELETE: api/products/5
     [HttpDelete("{id}")]
     [Authorize(Roles = UserRoles.Supplier)]
     public async Task<IActionResult> DeleteProduct(int id)
