@@ -13,7 +13,7 @@
         
         <AuthorizeView>
             <NotAuthorized>
-                <a href="/register" class="btn btn-primary btn-lg mt-3">Crie sua conta agora</a>
+                <a href="/auth/register" class="btn btn-primary btn-lg mt-3">Crie sua conta agora</a>
             </NotAuthorized>
             <Authorized>
                 <p class="text-success mt-2">Olá, @context.User.Identity?.Name! Boas compras.</p>
@@ -76,7 +76,7 @@
                                     </button>
                                 </Authorized>
                                 <NotAuthorized>
-                                    <a href="/login" class="btn btn-outline-primary">
+                                    <a href="/auth/login" class="btn btn-outline-primary">
                                         Login para Comprar
                                     </a>
                                 </NotAuthorized>
@@ -100,14 +100,24 @@
     {
         try
         {
-            _products = await Http.GetFromJsonAsync<List<ProductDto>>("api/products");
-            
-            _products = _products?.Where(p => p.IsActive).ToList(); 
+            _products = await Http.GetFromJsonAsync<ICollection<ProductDto>>("api/products");
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Erro ao carregar produtos: {ex.Message}");
             _products = new List<ProductDto>();
+            var sampleProduct = new ProductDto
+            {
+                Id = 1,
+                Name = "Produto de Exemplo",
+                CategoryName = "Categoria Exemplo",
+                BasePrice = 99.99M,
+                Images = new List<ProductImageDto>
+                {
+                    new ProductImageDto { ImageUrl = "https://via.placeholder.com/150" }
+                }
+            };
+            _products.Add(sampleProduct);
         }
     }
 

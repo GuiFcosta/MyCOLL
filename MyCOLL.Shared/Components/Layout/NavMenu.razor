@@ -70,6 +70,17 @@
     </nav>
 </div>
 
+<style>
+    .nav-link {
+        display: flex;
+        align-items: center;
+    }
+
+    .nav-link .bi {
+        margin-right: 10px;
+    }
+</style>
+
 @code {
     private bool _collapseNavMenu = true;
     private string? NavMenuCssClass => _collapseNavMenu ? "collapse" : null;
@@ -77,6 +88,7 @@
     private void ToggleNavMenu()
     {
         _collapseNavMenu = !_collapseNavMenu;
+        InvokeAsync(StateHasChanged);
     }
 
     private async Task Logout()

@@ -17,8 +17,11 @@ public class ProductRepository : IProductRepository
     public async Task<IEnumerable<Product>> GetClientProducts()
     {
         return await _context.Products
-            .Include(p=>p.Category)
-            .Where(p => p.IsActive == true && p.Stock > 0)
+            .Include(p => p.Category)      // Carrega Categoria
+            .Include(p => p.Supplier)      // Carrega Fornecedor
+            .Include(p => p.Images)        // Carrega Imagens
+            .Where(p => p.IsActive)        // Filtra só ativos (opcional)
+            .AsNoTracking()                // <--- IMPORTANTE: Melhora performance para leitura
             .ToListAsync();
     }
 

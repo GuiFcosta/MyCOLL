@@ -26,7 +26,7 @@ public static class MauiProgram
             {
                 // 10.0.2.2 é o "localhost" do PC visto de dentro do emulador Android
                 // ATENÇÃO: Verifique a porta da sua API (ex: 7000, 5000, 7234)
-                baseAddress = "http://10.0.2.2:5000/"; 
+                baseAddress = "http://10.0.2.2:5048/"; 
             }
             else
             {

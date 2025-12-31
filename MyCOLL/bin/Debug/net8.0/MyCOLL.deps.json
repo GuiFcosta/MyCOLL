@@ -1133,7 +1133,8 @@
           "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": "8.0.20",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "8.0.20",
           "Microsoft.EntityFrameworkCore": "8.0.21",
-          "Microsoft.EntityFrameworkCore.SqlServer": "8.0.21"
+          "Microsoft.EntityFrameworkCore.SqlServer": "8.0.21",
+          "MyCOLL.Shared": "1.0.0"
         },
         "runtime": {
           "MyCOLL.Data.dll": {

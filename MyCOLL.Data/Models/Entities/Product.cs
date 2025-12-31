@@ -2,21 +2,9 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using MyCOLL.Data.Data;
+using MyCOLL.Shared.Models.Enums;
 
 namespace MyCOLL.Data.Models.Entities;
-
-public enum ProductType
-{
-    Collectible,
-    Supplement
-}
-
-public enum AvailabilityMode
-{
-    ListingOnly,
-    Sale,        
-    Rent         
-}
 
 public class Product
 {

@@ -17,5 +17,9 @@
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
     </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\MyCOLL.Shared\MyCOLL.Shared.csproj" />
+    </ItemGroup>
 
 </Project>

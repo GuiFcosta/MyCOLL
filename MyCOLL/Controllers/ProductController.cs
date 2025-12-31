@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using MyCOLL.Shared.Constants;
 using MyCOLL.Data.Models.Entities;
 using MyCOLL.Interface;
+using MyCOLL.Shared.Models.Dto;
 
 namespace MyCOLL.Controllers;
 
@@ -24,10 +25,40 @@ public class ProductController : ControllerBase
     // GET: api/products
     [HttpGet]
     [AllowAnonymous]
-    public async Task<ActionResult<IEnumerable<Product>>> GetClientProducts()
+    public async Task<ActionResult<IEnumerable<ProductDto>>> GetProducts()
     {
-        var products = await _repository.GetClientProducts();
-        return Ok(products);
+        // 1. Busca as Entidades do Banco de Dados
+        var productsFromDb = await _repository.GetClientProducts();
+
+        // 2. Transforma (Mapeia) Entidade -> DTO
+        var productsDto = productsFromDb.Select(p => new ProductDto
+        {
+            Id = p.Id,
+            Name = p.Name,
+            Description = p.Description,
+            Stock = p.Stock,
+            BasePrice = p.BasePrice,
+            FinalPrice = p.FinalPrice, // Valor calculado na Entidade
+            IsActive = p.IsActive,
+            ProductType = p.ProductType,
+            
+            // Mapeamento de Objetos Relacionados (Evita NullReferenceException)
+            CategoryId = p.CategoryId,
+            CategoryName = p.Category != null ? p.Category.Name : "Sem Categoria",
+            
+            SupplierId = p.SupplierId,
+            SupplierName = p.Supplier != null ? p.Supplier.UserName : "Desconhecido",
+
+            // Mapeamento da Lista de Imagens
+            Images = p.Images.Select(img => new ProductImageDto 
+            { 
+                Id = img.Id, 
+                ImageUrl = img.ImageUrl 
+            }).ToList()
+        }).ToList();
+
+        // 3. Retorna a lista de DTOs limpa
+        return Ok(productsDto);
     }
     
     // GET: api/products/sup
