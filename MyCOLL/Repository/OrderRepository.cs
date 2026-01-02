@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using MyCOLL.Data.Data;
 using MyCOLL.Data.Models.Entities;
 using MyCOLL.Interface;
+using MyCOLL.Shared.Models.Dto;
 
 namespace MyCOLL.Repository;
 
@@ -24,6 +25,12 @@ public class OrderRepository : IOrderRepository
         return await _context.Orders
             .Include(o => o.Items)
             .FirstOrDefaultAsync(o => o.Id == id);
+    }
+
+    public async Task<Product?> GetProductById(int id)
+    {
+        var product = await _context.Products.FindAsync(id);
+        return product;
     }
     public async Task AddOrder(Order order)
     {

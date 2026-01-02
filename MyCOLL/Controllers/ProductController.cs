@@ -73,7 +73,6 @@ public class ProductController : ControllerBase
 
     // GET: api/products/5
     [HttpGet("{id}")]
-    [Authorize(Roles = UserRoles.Supplier)]
     public async Task<ActionResult<Product>> GetById(int id)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

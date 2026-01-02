@@ -1,8 +1,10 @@
 ﻿@page "/"
 @using MyCOLL.Shared.Models.Dto
+@using MyCOLL.Shared.Services
 
 @inject HttpClient Http
 @inject NavigationManager NavManager
+@inject CartService CartService
 
 <PageTitle>Início - MyCOLL Loja</PageTitle>
 
@@ -142,7 +144,7 @@
 
     private void AddToCart(ProductDto product)
     {
-        // Lógica futura de carrinho
-        NavManager.NavigateTo("/cart");
+        CartService.AddToCart(product);
+        NavManager.NavigateTo("/order/cart");
     }
 }

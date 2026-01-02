@@ -40,12 +40,12 @@
                 @if (context.User.IsInRole(UserRoles.Client))
                 {
                     <div class="nav-item px-3">
-                        <NavLink class="nav-link" href="cart">
+                        <NavLink class="nav-link" href="/order/cart">
                             <span class="bi bi-cart-fill-nav-menu" aria-hidden="true"></span> Carrinho
                         </NavLink>
                     </div>
                     <div class="nav-item px-3">
-                        <NavLink class="nav-link" href="orders/history">
+                        <NavLink class="nav-link" href="/order/history">
                             <span class="bi bi-clock-history-nav-menu" aria-hidden="true"></span> Histórico
                         </NavLink>
                     </div>

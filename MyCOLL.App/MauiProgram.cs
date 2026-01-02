@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Logging;
 using MyCOLL.App.Services;
+using MyCOLL.Shared.Services;
 
 namespace MyCOLL.App;
 
@@ -21,7 +22,7 @@ public static class MauiProgram
         {
             // Endereço base da API
             string baseAddress;
-            // var devTunnelUrl = "https://hrf2r0rh-7004.uks1.devtunnels.ms";
+            var devTunnelUrl = "https://62pf7jbv-7004.uks1.devtunnels.ms";
 
             if (DeviceInfo.Platform == DevicePlatform.Android)
             {
@@ -35,9 +36,10 @@ public static class MauiProgram
                 baseAddress = "https://localhost:7004/"; 
             }
 
-            return new HttpClient { BaseAddress = new Uri(baseAddress) };
+            return new HttpClient { BaseAddress = new Uri(devTunnelUrl) };
         });
         builder.Services.AddAuthorizationCore();
+        builder.Services.AddSingleton<CartService>();
         builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
         
         
