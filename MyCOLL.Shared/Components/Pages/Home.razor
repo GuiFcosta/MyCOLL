@@ -47,9 +47,28 @@
                 <div class="col">
                     <div class="card h-100 shadow-sm border-0 product-card">
                         <div class="img-container" style="height: 200px; overflow: hidden; background-color: #f8f9fa;">
-                            @if (product.Images != null && product.Images.Any())
+                            @if (product.Images.Any())
                             {
-                                <img src="@product.Images.First().ImageUrl" class="card-img-top h-100 w-100" style="object-fit: contain; padding: 10px;" alt="@product.Name">
+                                
+                                var imgPath = product.Images.First().ImageUrl;
+                                string fullUrl;
+
+                                // Se já tiver http (é um link externo), usa direto
+                                if (imgPath.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    fullUrl = imgPath;
+                                }
+                                else
+                                {
+                                    // Concatena o endereço da API com o caminho da imagem
+                                    // O TrimStart('/') garante que não ficamos com duas barras //
+                                    fullUrl = $"{Http.BaseAddress}{imgPath.TrimStart('/')}";
+                                }
+                                
+                                <img src="@fullUrl" 
+                                class="card-img-top h-100 w-100" 
+                                style="object-fit: contain; padding: 10px;" 
+                                alt="@product.Name"/>
                             }
                             else
                             {
@@ -100,7 +119,7 @@
     {
         try
         {
-            _products = await Http.GetFromJsonAsync<ICollection<ProductDto>>("api/products");
+            _products = await Http.GetFromJsonAsync<ICollection<ProductDto>>("api/product");
         }
         catch (Exception ex)
         {

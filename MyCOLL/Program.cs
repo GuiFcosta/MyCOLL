@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MyCOLL.Data;
@@ -116,6 +117,22 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// 1. Permite servir ficheiros da própria pasta wwwroot da API (padrão)
+app.UseStaticFiles(); 
+
+// 2. TRUQUE: Permite servir ficheiros da pasta do Admin
+// Ajuste o caminho "../MyCOLL.Admin" se o nome da pasta for diferente
+var adminPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "MyCOLL.Admin", "wwwroot", "product-images");
+
+if (Directory.Exists(adminPath))
+{
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new PhysicalFileProvider(adminPath),
+        RequestPath = "/product-images"
+    });
+}
 
 // Auth -> Authorization
 app.UseAuthentication();
