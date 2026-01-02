@@ -1,6 +1,141 @@
 @page "/products/list"
-<h3>List</h3>
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
+@using MyCOLL.Shared.Models.Dto
+@inject HttpClient Http
+@inject AuthenticationStateProvider AuthStateProvider
+@inject NavigationManager NavManager
+@inject IJSRuntime JS
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3>📦 Meus Produtos</h3>
+        <a href="/products/create" class="btn btn-success">
+            + Novo Produto
+        </a>
+    </div>
+
+    @if (isLoading)
+    {
+        <div class="text-center">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p>A carregar o seu stock...</p>
+        </div>
+    }
+    else if (meusProdutos == null || !meusProdutos.Any())
+    {
+        <div class="alert alert-info text-center">
+            <h4>Ainda não tem produtos à venda.</h4>
+            <p>Clique em "Novo Produto" para começar a faturar!</p>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var p in meusProdutos)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        @* Tenta mostrar a primeira imagem, se existir *@
+                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                            @if (p.Images != null && p.Images.Any())
+                            {
+                                <img src="@p.Images.First().ImageUrl" style="max-height: 100%; max-width: 100%;" />
+                            }
+                            else
+                            {
+                                <span class="text-muted">Sem Imagem</span>
+                            }
+                        </div>
+                        
+                        <div class="card-body">
+                            <h5 class="card-title">@p.Name</h5>
+                            <p class="card-text text-truncate">@p.Description</p>
+                            
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge bg-primary fs-6">@p.FinalPrice.ToString("C")</span>
+                                <span class="badge bg-secondary">Stock: @p.Stock</span>
+                            </div>
+                            
+                            <div class="mt-2">
+                                @if (p.IsActive) 
+                                { <span class="badge bg-success">Ativo</span> } 
+                                else 
+                                { <span class="badge bg-danger">Inativo</span> }
+                            </div>
+                        </div>
+                        
+                        <div class="card-footer bg-white border-top-0 d-grid gap-2">
+                            <button class="btn btn-outline-danger btn-sm" @onclick="() => ApagarProduto(p.Id)">
+                                🗑️ Apagar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
 
 @code {
-    //TODO: Implement product list page (supplier only)
+    private List<ProductDto> meusProdutos = new();
+    private bool isLoading = true;
+    private string currentUserId = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // 1. Descobrir quem está logado
+            var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+            
+            if (user.Identity != null && user.Identity.IsAuthenticated)
+            {
+                currentUserId = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "";
+            }
+
+            // 2. Buscar TODOS os produtos da API
+            var todosProdutos = await Http.GetFromJsonAsync<List<ProductDto>>("api/Product");
+
+            if (todosProdutos != null)
+            {
+                // 3. Filtrar apenas os que têm o meu ID de fornecedor
+                meusProdutos = todosProdutos.Where(p => p.SupplierId == currentUserId).ToList();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao carregar produtos: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private async Task ApagarProduto(int id)
+    {
+        bool confirmar = await JS.InvokeAsync<bool>("confirm", "Tem a certeza que quer apagar este produto?");
+        if (confirmar)
+        {
+            try
+            {
+                var response = await Http.DeleteAsync($"api/Product/{id}");
+                if (response.IsSuccessStatusCode)
+                {
+                    // Remove da lista visualmente para não ter de recarregar a página
+                    var itemRemover = meusProdutos.FirstOrDefault(p => p.Id == id);
+                    if (itemRemover != null) meusProdutos.Remove(itemRemover);
+                }
+                else 
+                {
+                    await JS.InvokeVoidAsync("alert", "Não foi possível apagar. Tente novamente.");
+                }
+            }
+            catch (Exception ex)
+            {
+                 Console.WriteLine($"Erro: {ex.Message}");
+            }
+        }
+    }
 }

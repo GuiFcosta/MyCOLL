@@ -329,3 +329,6 @@ C:\Users\rodri\RiderProjects\MyCOLL\MyCOLL\obj\Debug\net8.0\MyCOLL.pdb
 C:\Users\rodri\RiderProjects\MyCOLL\MyCOLL\obj\Debug\net8.0\MyCOLL.genruntimeconfig.cache
 C:\Users\rodri\RiderProjects\MyCOLL\MyCOLL\obj\Debug\net8.0\ref\MyCOLL.dll
 C:\Users\gbigu\RiderProjects\MyCOLL\MyCOLL\bin\Debug\net8.0\Microsoft.AspNetCore.Components.Authorization.dll
+C:\Users\rodri\RiderProjects\MyCOLL\MyCOLL\bin\Debug\net8.0\MyCOLL.Shared.staticwebassets.runtime.json
+C:\Users\rodri\RiderProjects\MyCOLL\MyCOLL\bin\Debug\net8.0\MyCOLL.staticwebassets.runtime.json
+C:\Users\rodri\RiderProjects\MyCOLL\MyCOLL\bin\Debug\net8.0\Microsoft.AspNetCore.Components.Authorization.dll

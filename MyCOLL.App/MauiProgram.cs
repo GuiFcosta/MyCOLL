@@ -21,22 +21,23 @@ public static class MauiProgram
         builder.Services.AddScoped(sp =>
         {
             // Endereço base da API
-            string baseAddress;
-            var devTunnelUrl = "https://62pf7jbv-7004.uks1.devtunnels.ms";
+            string apiAddress;
 
+            // Lógica para decidir o endereço
             if (DeviceInfo.Platform == DevicePlatform.Android)
             {
-                // 10.0.2.2 é o "localhost" do PC visto de dentro do emulador Android
-                // ATENÇÃO: Verifique a porta da sua API (ex: 7000, 5000, 7234)
-                baseAddress = "http://10.0.2.2:5048/"; 
+                // No Emulador Android, o "localhost" do PC é 10.0.2.2
+                // IMPORTANTE: Usa a porta 5048 (HTTP) que vimos no Swagger
+                apiAddress = "http://10.0.2.2:5048"; 
             }
             else
             {
-                // Para Windows/Mac usa localhost normal
-                baseAddress = "https://localhost:7004/"; 
+                // No Windows, é localhost normal
+                apiAddress = "http://localhost:5048"; 
             }
 
-            return new HttpClient { BaseAddress = new Uri(devTunnelUrl) };
+            // Cria o HttpClient com o endereço calculado
+            return new HttpClient { BaseAddress = new Uri(apiAddress) };
         });
         builder.Services.AddAuthorizationCore();
         builder.Services.AddSingleton<CartService>();

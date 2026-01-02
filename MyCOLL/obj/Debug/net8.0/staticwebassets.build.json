@@ -1,20 +1,20 @@
 {
   "Version": 1,
-  "Hash": "FTtVOJ8fAL6xPPY80HV7tARfjHRF1KdJGB/QtOOEXLo=",
+  "Hash": "MxDGAjK3tnNIQ5k+tltV07atK7j2rmEryGYxzOehv9g=",
   "Source": "MyCOLL",
   "BasePath": "_content/MyCOLL",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [
     {
-      "Identity": "C:\\Users\\gbigu\\RiderProjects\\MyCOLL\\MyCOLL.Shared\\MyCOLL.Shared.csproj",
+      "Identity": "C:\\Users\\rodri\\RiderProjects\\MyCOLL\\MyCOLL.Shared\\MyCOLL.Shared.csproj",
       "Version": 2,
       "Source": "MyCOLL.Shared",
       "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
-      "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalPublishProperties": "",
       "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained",
       "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
-      "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalBuildProperties": "",
       "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained"
     }
   ],
@@ -22,17 +22,17 @@
     {
       "Name": "MyCOLL.Shared\\wwwroot",
       "Source": "MyCOLL.Shared",
-      "ContentRoot": "C:\\Users\\gbigu\\RiderProjects\\MyCOLL\\MyCOLL.Shared\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\rodri\\RiderProjects\\MyCOLL\\MyCOLL.Shared\\wwwroot\\",
       "BasePath": "_content/MyCOLL.Shared",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "C:\\Users\\gbigu\\RiderProjects\\MyCOLL\\MyCOLL.Shared\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\MyCOLL.Shared.bundle.scp.css",
+      "Identity": "C:\\Users\\rodri\\RiderProjects\\MyCOLL\\MyCOLL.Shared\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\MyCOLL.Shared.bundle.scp.css",
       "SourceId": "MyCOLL.Shared",
       "SourceType": "Project",
-      "ContentRoot": "C:\\Users\\gbigu\\RiderProjects\\MyCOLL\\MyCOLL.Shared\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\",
+      "ContentRoot": "C:\\Users\\rodri\\RiderProjects\\MyCOLL\\MyCOLL.Shared\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\",
       "BasePath": "_content/MyCOLL.Shared",
       "RelativePath": "MyCOLL.Shared.bundle.scp.css",
       "AssetKind": "All",
@@ -45,13 +45,32 @@
       "AssetTraitValue": "ProjectBundle",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\gbigu\\RiderProjects\\MyCOLL\\MyCOLL.Shared\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\MyCOLL.Shared.bundle.scp.css"
+      "OriginalItemSpec": "C:\\Users\\rodri\\RiderProjects\\MyCOLL\\MyCOLL.Shared\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\MyCOLL.Shared.bundle.scp.css"
     },
     {
-      "Identity": "C:\\Users\\gbigu\\RiderProjects\\MyCOLL\\MyCOLL\\obj\\Debug\\net8.0\\scopedcss\\bundle\\MyCOLL.styles.css",
+      "Identity": "C:\\Users\\rodri\\RiderProjects\\MyCOLL\\MyCOLL.Shared\\wwwroot\\css\\app.css",
+      "SourceId": "MyCOLL.Shared",
+      "SourceType": "Project",
+      "ContentRoot": "C:\\Users\\rodri\\RiderProjects\\MyCOLL\\MyCOLL.Shared\\wwwroot\\",
+      "BasePath": "_content/MyCOLL.Shared",
+      "RelativePath": "css/app.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\app.css"
+    },
+    {
+      "Identity": "C:\\Users\\rodri\\RiderProjects\\MyCOLL\\MyCOLL\\obj\\Debug\\net8.0\\scopedcss\\bundle\\MyCOLL.styles.css",
       "SourceId": "MyCOLL",
       "SourceType": "Computed",
-      "ContentRoot": "C:\\Users\\gbigu\\RiderProjects\\MyCOLL\\MyCOLL\\obj\\Debug\\net8.0\\scopedcss\\bundle\\",
+      "ContentRoot": "C:\\Users\\rodri\\RiderProjects\\MyCOLL\\MyCOLL\\obj\\Debug\\net8.0\\scopedcss\\bundle\\",
       "BasePath": "_content/MyCOLL",
       "RelativePath": "MyCOLL.styles.css",
       "AssetKind": "All",
@@ -64,7 +83,7 @@
       "AssetTraitValue": "ApplicationBundle",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\gbigu\\RiderProjects\\MyCOLL\\MyCOLL\\obj\\Debug\\net8.0\\scopedcss\\bundle\\MyCOLL.styles.css"
+      "OriginalItemSpec": "C:\\Users\\rodri\\RiderProjects\\MyCOLL\\MyCOLL\\obj\\Debug\\net8.0\\scopedcss\\bundle\\MyCOLL.styles.css"
     }
   ]
 }

@@ -36,7 +36,7 @@ public class Product
     public string SupplierId { get; set; } = string.Empty;
     
     [ForeignKey(nameof(SupplierId))]
-    public ApplicationUser Supplier { get; set; } = null!;
+    public ApplicationUser? Supplier { get; set; }
     
     [Required, Precision(18,2)]
     public decimal BasePrice { get; set; }
@@ -51,7 +51,7 @@ public class Product
     public int CategoryId { get; set; }
     
     [ForeignKey(nameof(CategoryId))]
-    public Category Category { get; set; } = null!;
+    public Category? Category { get; set; } 
     
     public ICollection<OrderItem>? OrderItems { get; set; }
     

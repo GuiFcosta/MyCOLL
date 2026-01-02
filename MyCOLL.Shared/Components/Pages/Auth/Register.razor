@@ -13,7 +13,7 @@
             <h3>Criar Nova Conta</h3>
         </div>
         <div class="card-body">
-            <EditForm Model="@_registerModel" OnValidSubmit="HandleRegistration">
+            <EditForm Model="@_registerModel" OnSubmit="HandleRegistration">
                 <DataAnnotationsValidator />
                 
                 @if (!string.IsNullOrEmpty(_errorMessage))
@@ -44,7 +44,19 @@
                     <InputText @bind-Value="_registerModel.ConfirmPassword" type="password" class="form-control" placeholder="******" />
                     <ValidationMessage For="@(() => _registerModel.ConfirmPassword)" />
                 </div>
-
+                
+                <div class="mb-3">
+                    <label class="form-label">NIF</label>
+                    <InputText @bind-Value="_registerModel.Nif" class="form-control" placeholder="123456789" />
+                    <ValidationMessage For="@(() => _registerModel.Nif)" />
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Morada</label>
+                    <InputText @bind-Value="_registerModel.Address" class="form-control" placeholder="Rua..." />
+                    <ValidationMessage For="@(() => _registerModel.Address)" />
+                </div>
+                
                 <div class="mb-3">
                     <label class="form-label">Tipo de Conta</label>
                     <InputSelect @bind-Value="_registerModel.Role" class="form-select">

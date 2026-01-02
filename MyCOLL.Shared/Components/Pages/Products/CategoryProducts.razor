@@ -1,0 +1,104 @@
+﻿@page "/categoria/{Id:int}"
+@using MyCOLL.Shared.Models.Dto
+@inject HttpClient Http
+@inject NavigationManager NavManager
+
+<div class="d-flex align-items-center mb-4">
+    <button class="btn btn-outline-secondary me-3 rounded-circle" @onclick="Voltar">
+        ⬅
+    </button>
+    <div>
+        <h6 class="text-muted m-0">Categoria</h6>
+        <h2 class="fw-bold m-0" style="color: var(--cor-topo, #00c2e0);">@categoryName</h2>
+    </div>
+</div>
+
+@if (isLoading)
+{
+    <div class="d-flex justify-content-center p-5">
+        <div class="spinner-border text-info" role="status"></div>
+    </div>
+}
+else if (produtosFiltrados == null || !produtosFiltrados.Any())
+{
+    <div class="text-center py-5">
+        <div style="font-size: 3rem;">🍂</div>
+        <h4 class="mt-3">Esta categoria ainda não tem produtos.</h4>
+        <button class="btn btn-primary mt-2" @onclick="Voltar">Voltar à Loja</button>
+    </div>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+        @foreach (var p in produtosFiltrados)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm p-3 border-0 rounded-4">
+                    <div style="height: 180px; overflow: hidden; border-radius: 10px; background-color: #eee; display: flex; align-items: center; justify-content: center;">
+                        <img src="@(p.Images?.FirstOrDefault()?.ImageUrl ?? "https://placehold.co/150x150?text=Sem+Foto")" 
+                             style="width: 100%; height: 100%; object-fit: cover;" 
+                             alt="@p.Name" 
+                             onerror="this.src='https://placehold.co/150x150?text=Erro+Img'" />
+                    </div>
+                    
+                    <div class="mt-3 text-center">
+                        <h5 class="fw-bold mb-1 text-truncate">@p.Name</h5>
+                        <h4 class="text-info fw-bold">@p.FinalPrice.ToString("0.00") €</h4>
+                        
+                        <div class="d-grid gap-2 mt-2">
+                             <button class="btn btn-outline-warning rounded-pill fw-bold">
+                                + Adicionar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    // ESTE PARÂMETRO CAPTURA O ID QUE VEM NO URL
+    [Parameter]
+    public int Id { get; set; }
+
+    private List<ProductDto> produtosFiltrados = new();
+    private string categoryName = "A carregar...";
+    private bool isLoading = true;
+
+    // Usamos OnParametersSetAsync em vez de OnInitializedAsync para que a página atualize se mudares de categoria 1 para categoria 2 sem sair da página
+    protected override async Task OnParametersSetAsync()
+    {
+        isLoading = true;
+        try
+        {
+            // 1. Descobrir o nome da Categoria 
+            var todasCats = await Http.GetFromJsonAsync<List<CategoryDto>>("api/Category");
+            var categoriaAtual = todasCats?.FirstOrDefault(c => c.Id == Id);
+            categoryName = categoriaAtual?.Name ?? "Categoria Desconhecida";
+
+            // 2. Buscar Produtos
+            var todosProdutos = await Http.GetFromJsonAsync<List<ProductDto>>("api/Product");
+            
+            if (todosProdutos != null)
+            {
+                // Filtra apenas os produtos que têm o ID desta categoria
+                produtosFiltrados = todosProdutos.Where(p => p.CategoryId == Id).ToList();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Erro: " + ex.Message);
+            categoryName = "Erro ao carregar";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private void Voltar()
+    {
+        NavManager.NavigateTo("/");
+    }
+}
