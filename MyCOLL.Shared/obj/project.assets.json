@@ -822,23 +822,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\rodri\\.nuget\\packages\\": {},
+    "C:\\Users\\gbigu\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\rodri\\RiderProjects\\MyCOLL\\MyCOLL.Shared\\MyCOLL.Shared.csproj",
+      "projectUniqueName": "C:\\Users\\gbigu\\RiderProjects\\MyCOLL\\MyCOLL.Shared\\MyCOLL.Shared.csproj",
       "projectName": "MyCOLL.Shared",
-      "projectPath": "C:\\Users\\rodri\\RiderProjects\\MyCOLL\\MyCOLL.Shared\\MyCOLL.Shared.csproj",
-      "packagesPath": "C:\\Users\\rodri\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\rodri\\RiderProjects\\MyCOLL\\MyCOLL.Shared\\obj\\",
+      "projectPath": "C:\\Users\\gbigu\\RiderProjects\\MyCOLL\\MyCOLL.Shared\\MyCOLL.Shared.csproj",
+      "packagesPath": "C:\\Users\\gbigu\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\gbigu\\RiderProjects\\MyCOLL\\MyCOLL.Shared\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\rodri\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\gbigu\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],

@@ -2,7 +2,6 @@
 @using MyCOLL.Shared.Models.Dto
 @using MyCOLL.Shared.Models.Enums
 @using System.Security.Claims
-@using Microsoft.AspNetCore.Components.Authorization
 
 @inject HttpClient Http
 @inject NavigationManager NavManager
@@ -11,74 +10,85 @@
 <div class="container mt-4 mb-5">
     <div class="card shadow">
         <div class="card-header bg-danger text-white">
-            <h3>📦 Registar Novo Produto</h3>
+            <h3>📦 Registar Novo Produto (Frontend)</h3>
         </div>
         <div class="card-body">
-            <EditForm Model="@novoProduto" OnValidSubmit="GuardarProduto">
+            <EditForm Model="@_newProductDto" OnValidSubmit="SaveProduct">
                 <DataAnnotationsValidator />
                 
-                @if (!string.IsNullOrEmpty(mensagemErro))
+                @if (!string.IsNullOrEmpty(_errorMessage))
                 {
-                    <div class="alert alert-danger">@mensagemErro</div>
+                    <div class="alert alert-danger mb-3">@_errorMessage</div>
                 }
 
+                @* --- Linha 1: Nome e Categoria --- *@
                 <div class="row">
-                    @* Nome *@
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Nome do Produto</label>
-                        <InputText @bind-Value="novoProduto.Name" class="form-control" placeholder="Ex: iPhone 15" />
+                        <InputText @bind-Value="_newProductDto.Name" class="form-control" placeholder="Ex: Moeda Rara" />
+                        <ValidationMessage For="() => _newProductDto.Name"/>
                     </div>
 
-                    @* Categoria (Por enquanto é um número, futuramente será um dropdown) *@
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">ID da Categoria</label>
-                        <InputNumber @bind-Value="novoProduto.CategoryId" class="form-control" placeholder="Ex: 1" />
+                        <label class="form-label">Categoria</label>
+                        <InputSelect class="form-select" @bind-Value="_newProductDto.CategoryId">
+                            <option value="0">Selecione...</option>
+                            @if (_categories.Any())
+                            {
+                                @foreach (var cat in _categories)
+                                {
+                                    <option value="@cat.Id">@cat.Name</option>
+                                }
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="() => _newProductDto.CategoryId"/>
                     </div>
                 </div>
 
                 @* Descrição *@
                 <div class="mb-3">
                     <label class="form-label">Descrição</label>
-                    <InputTextArea @bind-Value="novoProduto.Description" class="form-control" rows="3" />
+                    <InputTextArea @bind-Value="_newProductDto.Description" class="form-control" rows="3" />
+                     <ValidationMessage For="() => _newProductDto.Description"/>
                 </div>
 
+                @* --- Linha 2: Preços e Stock --- *@
                 <div class="row">
-                    @* Preço Base *@
                     <div class="col-md-4 mb-3">
                         <label class="form-label">Preço Base (€)</label>
-                        <InputNumber @bind-Value="novoProduto.BasePrice" class="form-control" />
+                        <InputNumber @bind-Value="_newProductDto.BasePrice" class="form-control" />
+                         <ValidationMessage For="() => _newProductDto.BasePrice"/>
                     </div>
 
-                    @* Taxa de Venda *@
                     <div class="col-md-4 mb-3">
                         <label class="form-label">Taxa de Venda (%)</label>
-                        <InputNumber @bind-Value="novoProduto.SellTax" class="form-control" />
+                        <InputNumber @bind-Value="_newProductDto.SellTax" class="form-control" />
+                         <ValidationMessage For="() => _newProductDto.SellTax"/>
                     </div>
 
-                    @* Stock *@
                     <div class="col-md-4 mb-3">
                         <label class="form-label">Stock Disponível</label>
-                        <InputNumber @bind-Value="novoProduto.Stock" class="form-control" />
+                        <InputNumber @bind-Value="_newProductDto.Stock" class="form-control" />
+                         <ValidationMessage For="() => _newProductDto.Stock"/>
                     </div>
                 </div>
 
+                @* --- Linha 3: Enums --- *@
                 <div class="row">
-                    @* Dropdown para ProductType (Enum) *@
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Tipo de Produto</label>
-                        <InputSelect @bind-Value="novoProduto.ProductType" class="form-select">
-                            @foreach (var type in Enum.GetValues(typeof(ProductType)))
+                        <InputSelect @bind-Value="_newProductDto.ProductType" class="form-select">
+                            @foreach (var type in Enum.GetValues<ProductType>())
                             {
                                 <option value="@type">@type</option>
                             }
                         </InputSelect>
                     </div>
 
-                    @* Dropdown para AvailabilityMode (Enum) *@
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Disponibilidade</label>
-                        <InputSelect @bind-Value="novoProduto.AvailabilityMode" class="form-select">
-                            @foreach (var mode in Enum.GetValues(typeof(AvailabilityMode)))
+                        <InputSelect @bind-Value="_newProductDto.AvailabilityMode" class="form-select">
+                            @foreach (var mode in Enum.GetValues<AvailabilityMode>())
                             {
                                 <option value="@mode">@mode</option>
                             }
@@ -87,20 +97,61 @@
                 </div>
 
                 @* Checkboxes *@
-                <div class="mb-3 form-check">
-                    <InputCheckbox @bind-Value="novoProduto.IsUsed" class="form-check-input" id="checkUsed" />
-                    <label class="form-check-label" for="checkUsed">É um artigo usado?</label>
-                </div>
-                
-                <div class="mb-3 form-check">
-                    <InputCheckbox @bind-Value="novoProduto.IsActive" class="form-check-input" id="checkActive" />
-                    <label class="form-check-label" for="checkActive">Produto Ativo (Visível na loja)</label>
-                </div>
+                 <div class="row mb-3">
+                     <div class="col-md-6">
+                        <div class="form-check form-check-inline">
+                            <InputCheckbox @bind-Value="_newProductDto.IsUsed" class="form-check-input" id="checkUsed" />
+                            <label class="form-check-label" for="checkUsed">Artigo Usado</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <InputCheckbox @bind-Value="_newProductDto.IsActive" class="form-check-input" id="checkActive" />
+                            <label class="form-check-label" for="checkActive">Ativo (Visível)</label>
+                        </div>
+                     </div>
+                 </div>
+
+                 @* --- ÁREA DE IMAGENS (Igual ao Backend visualmente) --- *@
+                 <div class="mb-4 border p-3 rounded bg-light">
+                     <label class="form-label fw-bold">Imagens do Produto</label>
+                     
+                     <InputFile OnChange="@HandleFileSelected" multiple class="form-control mb-3" accept="image/png, image/jpeg, image/jpg" />
+                     <small class="text-muted d-block mb-2">Max 5MB por imagem.</small>
+
+                     @if (_tempImagePreviews.Any())
+                     {
+                         <div class="d-flex flex-wrap gap-3">
+                             @foreach (var preview in _tempImagePreviews.Select((value, i) => new { i, value }))
+                             {
+                                 var index = preview.i;
+                                 var base64String = preview.value;
+                                 
+                                 <div class="card shadow-sm border-success" style="width: 120px;">
+                                     <img src="@base64String" class="card-img-top" style="height: 100px; object-fit: cover; opacity: 0.8"  alt=""/>
+                                     <div class="card-body p-1 text-center">
+                                         <small class="text-success d-block mb-1">Nova</small>
+                                         <button type="button" class="btn btn-secondary btn-sm w-100" @onclick="() => RemoveImage(index)">
+                                             <i class="bi bi-x"></i> Cancelar
+                                         </button>
+                                     </div>
+                                 </div>
+                             }
+                         </div>
+                     }
+                 </div>
 
                 @* Botões *@
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                     <a href="/" class="btn btn-secondary me-md-2">Cancelar</a>
-                    <button type="submit" class="btn btn-success">Salvar Produto</button>
+                    <button type="submit" class="btn btn-success" disabled="@_isSubmitting">
+                        @if (_isSubmitting)
+                        {
+                            <span class="spinner-border spinner-border-sm me-2"></span><span>A enviar...</span>
+                        }
+                        else
+                        {
+                            <span><i class="bi bi-check-lg"></i> Salvar Produto</span>
+                        }
+                    </button>
                 </div>
             </EditForm>
         </div>
@@ -108,62 +159,124 @@
 </div>
 
 @code {
-    private ProductDto novoProduto = new ProductDto 
+    // Usamos o DTO, não a Entidade
+    private ProductDto _newProductDto = new() 
     { 
-        IsActive = true, // Começa ativo por defeito
-        ProductType = ProductType.Collectible, // Valor padrão
+        IsActive = true, 
+        ProductType = ProductType.Collectible, 
         AvailabilityMode = AvailabilityMode.Sale
     };
     
-    private string mensagemErro = string.Empty;
+    private List<CategoryDto> _categories = new();
+    // Lista temporária apenas para mostrar as imagens no ecrã antes do envio
+    private List<string> _tempImagePreviews = new();
+    
+    private string _errorMessage = string.Empty;
+    private bool _isSubmitting = false;
+    private const long MaxFileSize = 1024 * 1024 * 5; // 5MB
 
     protected override async Task OnInitializedAsync()
     {
-        // 1. Obter o utilizador atual para preencher o SupplierId automaticamente
-        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-
-        if (user.Identity != null && user.Identity.IsAuthenticated)
+        try 
         {
-            // Tenta encontrar o ID nos Claims (geralmente ClaimTypes.NameIdentifier)
-            var userId = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            var userName = user.FindFirst(c => c.Type == ClaimTypes.Name)?.Value;
+            // 1. Carregar Categorias da API
+            _categories = await Http.GetFromJsonAsync<List<CategoryDto>>("api/Category") ?? new List<CategoryDto>();
 
-            if (!string.IsNullOrEmpty(userId))
-            {
-                novoProduto.SupplierId = userId;
-                novoProduto.SupplierName = userName ?? "Desconhecido";
-            }
-        }
-    }
+            // 2. Identificar o Fornecedor atual
+            var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
 
-    private async Task GuardarProduto()
-    {
-        try
-        {
-            // Validar se temos o ID do fornecedor
-            if (string.IsNullOrEmpty(novoProduto.SupplierId))
+            if (user.Identity != null && user.Identity.IsAuthenticated)
             {
-                mensagemErro = "Erro: Não foi possível identificar o fornecedor. Faça login novamente.";
-                return;
-            }
-
-            // Envia para a API
-            var response = await Http.PostAsJsonAsync("api/Product", novoProduto);
-
-            if (response.IsSuccessStatusCode)
-            {
-                NavManager.NavigateTo("/"); // Sucesso! Vai para o início
-            }
-            else
-            {
-                var erro = await response.Content.ReadAsStringAsync();
-                mensagemErro = $"Erro da API: {erro}";
+                _newProductDto.SupplierId = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             }
         }
         catch (Exception ex)
         {
-            mensagemErro = $"Erro de conexão: {ex.Message}";
+            _errorMessage = $"Erro ao inicializar: {ex.Message}";
+        }
+    }
+
+    // Lógica de Pré-visualização (Cliente-side)
+    private async Task HandleFileSelected(InputFileChangeEventArgs e)
+    {
+        _errorMessage = string.Empty;
+        var files = e.GetMultipleFiles(10); // Limite de 10 ficheiros por vez
+
+        foreach (var file in files)
+        {
+            try
+            {
+                // Lemos o ficheiro para a memória RAM do dispositivo do cliente
+                using var stream = file.OpenReadStream(MaxFileSize);
+                using var ms = new MemoryStream();
+                await stream.CopyToAsync(ms);
+                
+                // Convertemos para string Base64
+                var base64 = Convert.ToBase64String(ms.ToArray());
+                var finalString = $"data:{file.ContentType};base64,{base64}";
+
+                // Adicionamos à lista visual
+                _tempImagePreviews.Add(finalString);
+            }
+            catch (Exception ex)
+            {
+                _errorMessage = $"Erro ao processar {file.Name}: {ex.Message}. Verifique se é menor que 5MB.";
+            }
+        }
+    }
+
+    private void RemoveImage(int index)
+    {
+        if (index >= 0 && index < _tempImagePreviews.Count)
+        {
+            _tempImagePreviews.RemoveAt(index);
+        }
+    }
+
+    private async Task SaveProduct()
+    {
+        _isSubmitting = true;
+        _errorMessage = string.Empty;
+
+        try
+        {
+            if (string.IsNullOrEmpty(_newProductDto.SupplierId))
+            {
+                _errorMessage = "Erro: Fornecedor não identificado. Faça login novamente.";
+                return;
+            }
+
+            if (_newProductDto.CategoryId == 0)
+            {
+                 _errorMessage = "Erro: Selecione uma categoria válida.";
+                 return;
+            }
+
+            // --- O PASSO CRÍTICO ---
+            // Copiamos as strings Base64 da pré-visualização para o DTO que será enviado
+            _newProductDto.NewImagesBase64 = new List<string>(_tempImagePreviews);
+
+            // Enviamos o DTO (que agora é um JSON grande contendo as imagens) para a API
+            var response = await Http.PostAsJsonAsync("api/Products", _newProductDto);
+
+            if (response.IsSuccessStatusCode)
+            {
+                NavManager.NavigateTo("/"); 
+            }
+            else
+            {
+                var erroContent = await response.Content.ReadAsStringAsync();
+                _errorMessage = $"Erro da API ({response.StatusCode}): {erroContent}";
+            }
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = $"Erro de conexão: {ex.Message}";
+        }
+        finally
+        {
+            _isSubmitting = false;
         }
     }
 }

@@ -22,6 +22,7 @@ public static class MauiProgram
         {
             // Endereço base da API
             string apiAddress;
+            // var devTunnelUrl = "";
 
             // Lógica para decidir o endereço
             if (DeviceInfo.Platform == DevicePlatform.Android)
@@ -33,7 +34,7 @@ public static class MauiProgram
             else
             {
                 // No Windows, é localhost normal
-                apiAddress = "http://localhost:5048"; 
+                apiAddress = "https://localhost:7004"; 
             }
 
             // Cria o HttpClient com o endereço calculado

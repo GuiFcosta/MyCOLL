@@ -1,8 +1,8 @@
 ﻿:root {
-    --cor-topo: #00bcd4;       /* Azul Ciano (Barra de cima) */
-    --cor-fundo: #fff8e1;      /* Bege/Amarelo claro (Fundo) */
+    --cor-topo: #A93226;       /* Vermelho Escuro (Barra de cima) */
+    --cor-fundo: #FFEBEE;      /* Vermelho Claro/Rosa (Fundo) */
     --cor-texto: #333;
-    --cor-botao: #ff9800;      /* Laranja (Destaques) */
+    --cor-botao: #E53935;      /* Vermelho (Destaques) */
 }
 
 body {

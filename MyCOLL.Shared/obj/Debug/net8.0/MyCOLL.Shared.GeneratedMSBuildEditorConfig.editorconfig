@@ -9,67 +9,67 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows,browser
 build_property.RootNamespace = MyCOLL.Shared
 build_property.RootNamespace = MyCOLL.Shared
-build_property.ProjectDir = C:\Users\rodri\RiderProjects\MyCOLL\MyCOLL.Shared\
+build_property.ProjectDir = C:\Users\gbigu\RiderProjects\MyCOLL\MyCOLL.Shared\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\rodri\RiderProjects\MyCOLL\MyCOLL.Shared
+build_property.MSBuildProjectDirectory = C:\Users\gbigu\RiderProjects\MyCOLL\MyCOLL.Shared
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/Users/rodri/RiderProjects/MyCOLL/MyCOLL.Shared/Components/Pages/Auth/Login.razor]
+[C:/Users/gbigu/RiderProjects/MyCOLL/MyCOLL.Shared/Components/Pages/Auth/Login.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBdXRoXExvZ2luLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/rodri/RiderProjects/MyCOLL/MyCOLL.Shared/Components/Pages/Auth/Register.razor]
+[C:/Users/gbigu/RiderProjects/MyCOLL/MyCOLL.Shared/Components/Pages/Auth/Register.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBdXRoXFJlZ2lzdGVyLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/rodri/RiderProjects/MyCOLL/MyCOLL.Shared/Components/Pages/Home.razor]
+[C:/Users/gbigu/RiderProjects/MyCOLL/MyCOLL.Shared/Components/Pages/Home.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIb21lLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/rodri/RiderProjects/MyCOLL/MyCOLL.Shared/Components/Pages/Order/Cart.razor]
+[C:/Users/gbigu/RiderProjects/MyCOLL/MyCOLL.Shared/Components/Pages/Order/Cart.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xPcmRlclxDYXJ0LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/rodri/RiderProjects/MyCOLL/MyCOLL.Shared/Components/Pages/Order/History.razor]
+[C:/Users/gbigu/RiderProjects/MyCOLL/MyCOLL.Shared/Components/Pages/Order/History.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xPcmRlclxIaXN0b3J5LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/rodri/RiderProjects/MyCOLL/MyCOLL.Shared/Components/Pages/Products/CategoryProducts.razor]
+[C:/Users/gbigu/RiderProjects/MyCOLL/MyCOLL.Shared/Components/Pages/Products/CategoryProducts.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xQcm9kdWN0c1xDYXRlZ29yeVByb2R1Y3RzLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/rodri/RiderProjects/MyCOLL/MyCOLL.Shared/Components/Pages/Products/Create.razor]
+[C:/Users/gbigu/RiderProjects/MyCOLL/MyCOLL.Shared/Components/Pages/Products/Create.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xQcm9kdWN0c1xDcmVhdGUucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/rodri/RiderProjects/MyCOLL/MyCOLL.Shared/Components/Pages/Products/Details.razor]
+[C:/Users/gbigu/RiderProjects/MyCOLL/MyCOLL.Shared/Components/Pages/Products/Details.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xQcm9kdWN0c1xEZXRhaWxzLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/rodri/RiderProjects/MyCOLL/MyCOLL.Shared/Components/Pages/Products/List.razor]
+[C:/Users/gbigu/RiderProjects/MyCOLL/MyCOLL.Shared/Components/Pages/Products/List.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xQcm9kdWN0c1xMaXN0LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/rodri/RiderProjects/MyCOLL/MyCOLL.Shared/Components/Routes.razor]
+[C:/Users/gbigu/RiderProjects/MyCOLL/MyCOLL.Shared/Components/Routes.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSb3V0ZXMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/rodri/RiderProjects/MyCOLL/MyCOLL.Shared/Components/_Imports.razor]
+[C:/Users/gbigu/RiderProjects/MyCOLL/MyCOLL.Shared/Components/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xfSW1wb3J0cy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/rodri/RiderProjects/MyCOLL/MyCOLL.Shared/_Imports.razor]
+[C:/Users/gbigu/RiderProjects/MyCOLL/MyCOLL.Shared/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/rodri/RiderProjects/MyCOLL/MyCOLL.Shared/Components/Layout/MainLayout.razor]
+[C:/Users/gbigu/RiderProjects/MyCOLL/MyCOLL.Shared/Components/Layout/MainLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTWFpbkxheW91dC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-j665csx7zi
 
-[C:/Users/rodri/RiderProjects/MyCOLL/MyCOLL.Shared/Components/Layout/NavMenu.razor]
+[C:/Users/gbigu/RiderProjects/MyCOLL/MyCOLL.Shared/Components/Layout/NavMenu.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTmF2TWVudS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-ifvlufm8wr

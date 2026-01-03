@@ -7,15 +7,15 @@
 @inject CartService CartService
 <div class="page">
     <main>
-        <div style="background-color: var(--cor-topo); padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+        <div style="background-color: #9b111f; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
             
             <div style="font-size: 1.5rem; font-weight: bold; color: white;">
-                🌿 Natur<span style="color: yellow;">Indie</span>
+                <span>MyCollection</span>
             </div>
 
             <div class="d-none d-md-block" style="flex-grow: 1; max-width: 600px; margin: 0 30px;">
                 <div class="input-group">
-                    <input type="text" class="form-control rounded-pill" placeholder="Pesquisar frutas, legumes..." style="border: none; padding-left: 20px;">
+                    <input type="text" class="form-control rounded-pill" placeholder="Pesquisar" style="border: none; padding-left: 20px;">
                 </div>
             </div>
 
@@ -67,19 +67,19 @@
                                     @onclick="ToggleMenu">
                                 Olá, @context.User.Identity?.Name
                             </button>
-                            <ul class="dropdown-menu dropdown-menu-end shadow border-0 @(mostrarMenu ? "show" : "")"
+                            <ul class="dropdown-menu dropdown-menu-end shadow border-0 @(_collapseMainMenu ? "show" : "")"
                                 style="position: absolute; right: 0; left: auto; margin-top: 10px;">
                             
                                 <li>
                                     <button class="dropdown-item text-danger" @onclick="Logout">
-                                        🚪 Sair
+                                        Sair
                                     </button>
                                 </li>
                             </ul>
                         </div>
                     </Authorized>
                     <NotAuthorized>
-                        <a href="login" class="btn btn-outline-light rounded-pill px-3 py-1 fw-bold btn-sm ms-2">
+                        <a href="/auth/login" class="btn btn-outline-light rounded-pill px-3 py-1 fw-bold btn-sm ms-2">
                             👤 Entrar
                         </a>
                     </NotAuthorized>
@@ -95,7 +95,7 @@
 </div>
 
 @code {
-    private bool mostrarMenu = false;
+    private bool _collapseMainMenu = false;
 
     // 4. LÓGICA PARA ATUALIZAR SOZINHO
     protected override void OnInitialized()
@@ -112,12 +112,12 @@
 
     private void ToggleMenu()
     {
-        mostrarMenu = !mostrarMenu;
+        _collapseMainMenu = !_collapseMainMenu;
     }
 
     private async Task Logout()
     {
-        mostrarMenu = false;
+        _collapseMainMenu = false;
         if (AuthStateProvider is MyCOLL.Shared.Interface.IAuthService authService)
         {
             await authService.Logout();

@@ -1,5 +1,6 @@
 using MyCOLL.Interface;
 using MyCOLL.Repository;
+using MyCOLL.Shared.Models.Dto;
 
 namespace MyCOLL.Controllers;
 
@@ -20,10 +21,16 @@ public class CategoryController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+    public async Task<ActionResult<IEnumerable<CategoryDto>>> GetCategories()
     {
         var categories = await _repository.GetAllCategories();
-        return Ok(categories);
+        // Map Category entities to CategoryDtos
+        var categoryDtos = categories.Select(c => new CategoryDto
+        {
+            Id = c.Id,
+            Name = c.Name
+        }).ToList();
+        return Ok(categoryDtos);
     }
 
     [HttpGet("{id}")]

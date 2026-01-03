@@ -25,6 +25,7 @@ public class ProductDto
     public int CategoryId { get; set; }
     public string CategoryName { get; set; } = string.Empty; // Para evitar trazer o obj Category inteiro
     
+    public List<String> NewImagesBase64 { get; set; } = new(); // Imagens novas em Base64 para upload
     // Lista de URLs ou DTOs de imagem
     public List<ProductImageDto> Images { get; set; } = new();
 }
@@ -34,4 +35,5 @@ public class ProductImageDto
 {
     public int Id { get; set; }
     public string ImageUrl { get; set; } = string.Empty;
+    
 }
