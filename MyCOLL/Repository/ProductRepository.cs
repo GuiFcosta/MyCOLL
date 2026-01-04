@@ -29,12 +29,15 @@ public class ProductRepository : IProductRepository
     {
         return await _context.Products
             .Where(p => p.SupplierId == userId)
+            .Include(p => p.Images)
             .ToListAsync();
     }
     
     public async Task<Product?> GetProductById(int id)
     {
-        return await _context.Products.FindAsync(id);
+        return await _context.Products
+            .Include(p => p.Images)
+            .FirstOrDefaultAsync(p => p.Id == id);
     }
     
     public async Task AddProduct(Product product)
@@ -46,6 +49,21 @@ public class ProductRepository : IProductRepository
     public async Task UpdateProduct(Product product)
     {
         _context.Products.Update(product);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<ProductImage?> GetImageById(int id)
+    {
+        return await _context.ProductImages.FindAsync(id);
+    }
+    
+    public async Task DeleteImage(int imageId)
+    {
+        var image = await _context.ProductImages.FindAsync(imageId);
+        if (image == null)
+            return;
+        
+        _context.ProductImages.Remove(image);
         await _context.SaveChangesAsync();
     }
     

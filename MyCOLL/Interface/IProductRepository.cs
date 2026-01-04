@@ -9,5 +9,7 @@ public interface IProductRepository
     Task<Product?> GetProductById(int id);
     Task AddProduct(Product product);
     Task UpdateProduct(Product product);
+    Task<ProductImage?> GetImageById(int id);
+    Task DeleteImage(int imageId);
     Task DeleteProduct(int id);
 }

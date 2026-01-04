@@ -1,10 +1,12 @@
 ﻿@page "/category/{Id:int}"
 @using MyCOLL.Shared.Models.Dto
+@using MyCOLL.Shared.Services
 @inject HttpClient Http
 @inject NavigationManager NavManager
+@inject CartService CartService
 
 <div class="d-flex align-items-center mb-4">
-    <button class="btn btn-outline-secondary me-3 rounded-circle" @onclick="Voltar">
+    <button class="btn btn-outline-secondary me-3 rounded-circle" @onclick="Back">
         ⬅
     </button>
     <div>
@@ -22,9 +24,8 @@
 else if (_productList.Count == 0 || !_productList.Any())
 {
     <div class="text-center py-5">
-        <div style="font-size: 3rem;">🍂</div>
         <h4 class="mt-3">Esta categoria ainda não tem produtos.</h4>
-        <button class="btn btn-primary mt-2" @onclick="Voltar">Voltar à Loja</button>
+        <button class="btn btn-primary mt-2" @onclick="Back">Voltar à Loja</button>
     </div>
 }
 else
@@ -62,13 +63,31 @@ else
                     
                     <div class="mt-3 text-center">
                         <h5 class="fw-bold mb-1 text-truncate">@p.Name</h5>
-                        <h4 class="text-info fw-bold">@p.FinalPrice.ToString("0.00") €</h4>
-                        
-                        <div class="d-grid gap-2 mt-2">
-                             <button class="btn btn-outline-warning rounded-pill fw-bold">
-                                + Adicionar
-                            </button>
-                        </div>
+                        <h4 class="text-info fw-bold"
+                            style="color: var(--cor-topo, #00bcd4) !important;">
+                            @p.FinalPrice.ToString("0.00") €
+                        </h4>
+                        @if(p.Stock > 0)
+                        {
+                            <AuthorizeView>
+                                <Authorized>
+                                    <button class="btn btn-outline-warning w-100 rounded-pill mt-2 fw-bold"
+                                            style="color: black; border-color: darkred;" 
+                                            @onclick="() => AddItemToCart(p)">
+                                        + Adicionar
+                                    </button>
+                                </Authorized>
+                                <NotAuthorized>
+                                    <a href="/auth/login" class="btn btn-outline-primary">
+                                        Login para Comprar
+                                    </a>
+                                </NotAuthorized>
+                            </AuthorizeView>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger mb-2">Esgotado</span>
+                        }
                     </div>
                 </div>
             </div>
@@ -115,8 +134,11 @@ else
             _isLoading = false;
         }
     }
-
-    private void Voltar()
+    private void AddItemToCart(ProductDto produto)
+    {
+        CartService.AddToCart(produto); 
+    }
+    private void Back()
     {
         NavManager.NavigateTo("/");
     }

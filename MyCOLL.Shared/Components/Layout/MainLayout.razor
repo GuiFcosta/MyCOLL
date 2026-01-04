@@ -9,24 +9,15 @@
     <main>
         <div style="background-color: #9b111f; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
             
-            <div style="font-size: 1.5rem; font-weight: bold; color: white;">
-                <span>MyCollection</span>
-            </div>
-
-            <div class="d-none d-md-block" style="flex-grow: 1; max-width: 600px; margin: 0 30px;">
-                <div class="input-group">
-                    <input type="text" class="form-control rounded-pill" placeholder="Pesquisar" style="border: none; padding-left: 20px;">
-                </div>
+            <div>
+                <a href="/" style="font-size: 1.5rem; font-weight: bold; color: white; text-decoration: none">MyCollection</a>
             </div>
 
             <div class="d-flex gap-3 text-white align-items-center">
-    
-                <a href="/" class="text-white text-decoration-none fw-bold">Início</a>
-
                 <AuthorizeView Roles="Fornecedor">
                     <Authorized>
                         <a href="/products/list" class="text-white text-decoration-none">
-                            📦 Meus Prod.
+                            📦 Meus Produtos
                         </a>
                         <a href="/products/create" class="text-white text-decoration-none ms-2">
                             + Adicionar
@@ -47,7 +38,7 @@
                             }
                         </a>
                         <a href="/order/history" class="text-white text-decoration-none position-relative ms-2">
-                            <span style="font-size: 1.5rem;">Historico</span>
+                            <span style="font-size: 1.5rem;">Histórico</span>
                             @if (CartService.Items.Any())
                             {
                                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark border border-light" 
@@ -69,7 +60,6 @@
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end shadow border-0 @(_collapseMainMenu ? "show" : "")"
                                 style="position: absolute; right: 0; left: auto; margin-top: 10px;">
-                            
                                 <li>
                                     <button class="dropdown-item text-danger" @onclick="Logout">
                                         Sair
@@ -84,7 +74,6 @@
                         </a>
                     </NotAuthorized>
                 </AuthorizeView>
-
             </div>
         </div>
 
@@ -118,7 +107,7 @@
     private async Task Logout()
     {
         _collapseMainMenu = false;
-        if (AuthStateProvider is MyCOLL.Shared.Interface.IAuthService authService)
+        if (AuthStateProvider is IAuthService authService)
         {
             await authService.Logout();
             NavManager.NavigateTo("/auth/login");

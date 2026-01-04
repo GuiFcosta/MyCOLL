@@ -2,13 +2,13 @@ namespace MyCOLL.Shared.Models.Enums;
 
 public enum ProductType
 {
-    Collectible,
-    Supplement
+    Colecionável,
+    Complemento
 }
 
 public enum AvailabilityMode
 {
-    ListingOnly,
-    Sale,        
-    Rent         
+    Listar,
+    Venda,
+    Aluguel
 }

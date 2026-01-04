@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "Fc6ND9M//ReveABSXJlh9bHP10F2NBcUi6bQrMGoXFc=",
+  "Hash": "xlwG0p74uuNYOv1dPwoeEmhOwl/JX2RbPhJqQaCr1AU=",
   "Source": "MyCOLL",
   "BasePath": "_content/MyCOLL",
   "Mode": "Default",
@@ -24,6 +24,13 @@
       "Source": "MyCOLL.Shared",
       "ContentRoot": "C:\\Users\\gbigu\\RiderProjects\\MyCOLL\\MyCOLL.Shared\\wwwroot\\",
       "BasePath": "_content/MyCOLL.Shared",
+      "Pattern": "**"
+    },
+    {
+      "Name": "MyCOLL\\wwwroot",
+      "Source": "MyCOLL",
+      "ContentRoot": "C:\\Users\\gbigu\\RiderProjects\\MyCOLL\\MyCOLL\\wwwroot\\",
+      "BasePath": "_content/MyCOLL",
       "Pattern": "**"
     }
   ],
@@ -84,6 +91,44 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Users\\gbigu\\RiderProjects\\MyCOLL\\MyCOLL\\obj\\Debug\\net8.0\\scopedcss\\bundle\\MyCOLL.styles.css"
+    },
+    {
+      "Identity": "C:\\Users\\gbigu\\RiderProjects\\MyCOLL\\MyCOLL\\wwwroot\\product-images\\1e05c102-96b3-4172-a1e7-515e2a7cdd2a.jpg",
+      "SourceId": "MyCOLL",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\gbigu\\RiderProjects\\MyCOLL\\MyCOLL\\wwwroot\\",
+      "BasePath": "_content/MyCOLL",
+      "RelativePath": "product-images/1e05c102-96b3-4172-a1e7-515e2a7cdd2a.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\product-images\\1e05c102-96b3-4172-a1e7-515e2a7cdd2a.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\gbigu\\RiderProjects\\MyCOLL\\MyCOLL\\wwwroot\\product-images\\8f12b9f8-656b-4d6b-90e6-d568d670608d.jpg",
+      "SourceId": "MyCOLL",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\gbigu\\RiderProjects\\MyCOLL\\MyCOLL\\wwwroot\\",
+      "BasePath": "_content/MyCOLL",
+      "RelativePath": "product-images/8f12b9f8-656b-4d6b-90e6-d568d670608d.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\product-images\\8f12b9f8-656b-4d6b-90e6-d568d670608d.jpg"
     }
   ]
 }

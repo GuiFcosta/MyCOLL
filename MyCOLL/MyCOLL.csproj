@@ -31,4 +31,8 @@
       <ProjectReference Include="..\MyCOLL.Shared\MyCOLL.Shared.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="wwwroot\" />
+    </ItemGroup>
+
 </Project>

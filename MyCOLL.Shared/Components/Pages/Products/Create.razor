@@ -1,4 +1,6 @@
 @page "/products/create"
+@page "/products/edit/{ProductId:int}"
+
 @using MyCOLL.Shared.Models.Dto
 @using MyCOLL.Shared.Models.Enums
 @using System.Security.Claims
@@ -6,11 +8,17 @@
 @inject HttpClient Http
 @inject NavigationManager NavManager
 @inject AuthenticationStateProvider AuthStateProvider
+@inject IJSRuntime JsRuntime
 
 <div class="container mt-4 mb-5">
     <div class="card shadow">
         <div class="card-header bg-danger text-white">
-            <h3>📦 Registar Novo Produto (Frontend)</h3>
+            <h3>
+                @if (ProductId.HasValue)
+                { <span>✏️ Editar Produto</span> }
+                else
+                { <span>📦 Registar Novo Produto</span> }
+            </h3>
         </div>
         <div class="card-body">
             <EditForm Model="@_newProductDto" OnValidSubmit="SaveProduct">
@@ -26,7 +34,6 @@
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Nome do Produto</label>
                         <InputText @bind-Value="_newProductDto.Name" class="form-control" placeholder="Ex: Moeda Rara" />
-                        <ValidationMessage For="() => _newProductDto.Name"/>
                     </div>
 
                     <div class="col-md-6 mb-3">
@@ -36,12 +43,9 @@
                             @if (_categories.Any())
                             {
                                 @foreach (var cat in _categories)
-                                {
-                                    <option value="@cat.Id">@cat.Name</option>
-                                }
+                                { <option value="@cat.Id">@cat.Name</option> }
                             }
                         </InputSelect>
-                        <ValidationMessage For="() => _newProductDto.CategoryId"/>
                     </div>
                 </div>
 
@@ -49,7 +53,6 @@
                 <div class="mb-3">
                     <label class="form-label">Descrição</label>
                     <InputTextArea @bind-Value="_newProductDto.Description" class="form-control" rows="3" />
-                     <ValidationMessage For="() => _newProductDto.Description"/>
                 </div>
 
                 @* --- Linha 2: Preços e Stock --- *@
@@ -57,31 +60,26 @@
                     <div class="col-md-4 mb-3">
                         <label class="form-label">Preço Base (€)</label>
                         <InputNumber @bind-Value="_newProductDto.BasePrice" class="form-control" />
-                         <ValidationMessage For="() => _newProductDto.BasePrice"/>
                     </div>
 
                     <div class="col-md-4 mb-3">
                         <label class="form-label">Taxa de Venda (%)</label>
                         <InputNumber @bind-Value="_newProductDto.SellTax" class="form-control" />
-                         <ValidationMessage For="() => _newProductDto.SellTax"/>
                     </div>
 
                     <div class="col-md-4 mb-3">
                         <label class="form-label">Stock Disponível</label>
                         <InputNumber @bind-Value="_newProductDto.Stock" class="form-control" />
-                         <ValidationMessage For="() => _newProductDto.Stock"/>
                     </div>
                 </div>
 
                 @* --- Linha 3: Enums --- *@
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Tipo de Produto</label>
+                        <label class="form-label">Tipo</label>
                         <InputSelect @bind-Value="_newProductDto.ProductType" class="form-select">
                             @foreach (var type in Enum.GetValues<ProductType>())
-                            {
-                                <option value="@type">@type</option>
-                            }
+                            { <option value="@type">@type</option> }
                         </InputSelect>
                     </div>
 
@@ -89,9 +87,7 @@
                         <label class="form-label">Disponibilidade</label>
                         <InputSelect @bind-Value="_newProductDto.AvailabilityMode" class="form-select">
                             @foreach (var mode in Enum.GetValues<AvailabilityMode>())
-                            {
-                                <option value="@mode">@mode</option>
-                            }
+                            { <option value="@mode">@mode</option> }
                         </InputSelect>
                     </div>
                 </div>
@@ -112,45 +108,48 @@
 
                  @* --- ÁREA DE IMAGENS (Igual ao Backend visualmente) --- *@
                  <div class="mb-4 border p-3 rounded bg-light">
-                     <label class="form-label fw-bold">Imagens do Produto</label>
+                     <label class="form-label fw-bold">Imagens</label>
+                     <InputFile OnChange="@HandleFileSelected" multiple class="form-control mb-3" accept="image/*" />
                      
-                     <InputFile OnChange="@HandleFileSelected" multiple class="form-control mb-3" accept="image/png, image/jpeg, image/jpg" />
-                     <small class="text-muted d-block mb-2">Max 5MB por imagem.</small>
-
-                     @if (_tempImagePreviews.Any())
-                     {
-                         <div class="d-flex flex-wrap gap-3">
-                             @foreach (var preview in _tempImagePreviews.Select((value, i) => new { i, value }))
+                     <div class="d-flex flex-wrap gap-3">
+                         @* 1. Imagens EXISTENTES (Vindas da API) *@
+                         @if (_existingImages.Any())
+                         {
+                             @foreach (var img in _existingImages)
                              {
-                                 var index = preview.i;
-                                 var base64String = preview.value;
-                                 
-                                 <div class="card shadow-sm border-success" style="width: 120px;">
-                                     <img src="@base64String" class="card-img-top" style="height: 100px; object-fit: cover; opacity: 0.8"  alt=""/>
+                                 <div class="card shadow-sm border-primary" style="width: 120px;">
+                                     <img src="@GetFullUrl(img.ImageUrl)" class="card-img-top" style="height: 100px; object-fit: cover;"/>
                                      <div class="card-body p-1 text-center">
-                                         <small class="text-success d-block mb-1">Nova</small>
-                                         <button type="button" class="btn btn-secondary btn-sm w-100" @onclick="() => RemoveImage(index)">
-                                             <i class="bi bi-x"></i> Cancelar
+                                         <small class="text-primary d-block mb-1">Salva</small>
+                                         <button type="button" class="btn btn-danger btn-sm w-100" @onclick="() => DeleteExistingImage(img)">
+                                             <span>Remover</span>
                                          </button>
                                      </div>
                                  </div>
                              }
-                         </div>
-                     }
+                         }
+                         @* 2. Imagens NOVAS (Base64 - Upload Pendente) *@
+                         @foreach (var preview in _tempImagePreviews.Select((val, i) => new { i, val }))
+                         {
+                             <div class="card shadow-sm border-success" style="width: 120px;">
+                                 <img src="@preview.val" class="card-img-top" style="height: 100px; object-fit: cover; opacity: 0.8" />
+                                 <div class="card-body p-1 text-center">
+                                     <small class="text-success d-block mb-1">Nova</small>
+                                     <button type="button" class="btn btn-secondary btn-sm w-100" @onclick="() => RemoveNewImage(preview.i)">
+                                         <span>Remover</span>
+                                     </button>
+                                 </div>
+                             </div>
+                         }
+                     </div>
                  </div>
 
                 @* Botões *@
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                     <a href="/" class="btn btn-secondary me-md-2">Cancelar</a>
                     <button type="submit" class="btn btn-success" disabled="@_isSubmitting">
-                        @if (_isSubmitting)
-                        {
-                            <span class="spinner-border spinner-border-sm me-2"></span><span>A enviar...</span>
-                        }
-                        else
-                        {
-                            <span><i class="bi bi-check-lg"></i> Salvar Produto</span>
-                        }
+                        @if (_isSubmitting) { <span class="spinner-border spinner-border-sm me-2"></span> }
+                        <span>@(ProductId.HasValue ? "Atualizar Produto" : "Criar Produto")</span>
                     </button>
                 </div>
             </EditForm>
@@ -159,20 +158,24 @@
 </div>
 
 @code {
+    [Parameter] public int? ProductId { get; set; }
     // Usamos o DTO, não a Entidade
+    
     private ProductDto _newProductDto = new() 
     { 
         IsActive = true, 
-        ProductType = ProductType.Collectible, 
-        AvailabilityMode = AvailabilityMode.Sale
+        ProductType = ProductType.Colecionável, 
+        AvailabilityMode = AvailabilityMode.Venda
     };
     
-    private List<CategoryDto> _categories = new();
-    // Lista temporária apenas para mostrar as imagens no ecrã antes do envio
+    private ICollection<CategoryDto> _categories = new List<CategoryDto>();
+    
     private List<string> _tempImagePreviews = new();
+    private ICollection<ProductImageDto> _existingImages = new List<ProductImageDto>();
     
     private string _errorMessage = string.Empty;
     private bool _isSubmitting = false;
+    
     private const long MaxFileSize = 1024 * 1024 * 5; // 5MB
 
     protected override async Task OnInitializedAsync()
@@ -186,7 +189,33 @@
             var authState = await AuthStateProvider.GetAuthenticationStateAsync();
             var user = authState.User;
 
-            if (user.Identity != null && user.Identity.IsAuthenticated)
+            if (ProductId.HasValue && ProductId.Value > 0)
+            {
+                var existingProduct = await Http.GetFromJsonAsync<ProductDto>($"api/Product/{ProductId.Value}");
+                if (existingProduct != null)
+                {
+                    // Mapeamos de DTO Leitura -> DTO Criação/Edição
+                    _newProductDto = new ProductDto
+                    {
+                        Id = existingProduct.Id,
+                        Name = existingProduct.Name,
+                        Description = existingProduct.Description,
+                        BasePrice = existingProduct.BasePrice,
+                        SellTax = existingProduct.SellTax,
+                        Stock = existingProduct.Stock,
+                        CategoryId = existingProduct.CategoryId,
+                        ProductType = existingProduct.ProductType,
+                        AvailabilityMode = existingProduct.AvailabilityMode,
+                        IsUsed = existingProduct.IsUsed,
+                        IsActive = existingProduct.IsActive,
+                        SupplierId = existingProduct.SupplierId
+                    };
+                    
+                    // Guardamos as imagens existentes numa lista separada para mostrar
+                    _existingImages = existingProduct.Images;
+                }
+            }
+            else if (user.Identity != null && user.Identity.IsAuthenticated)
             {
                 _newProductDto.SupplierId = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             }
@@ -197,11 +226,9 @@
         }
     }
 
-    // Lógica de Pré-visualização (Cliente-side)
     private async Task HandleFileSelected(InputFileChangeEventArgs e)
     {
-        _errorMessage = string.Empty;
-        var files = e.GetMultipleFiles(10); // Limite de 10 ficheiros por vez
+        var files = e.GetMultipleFiles(5);
 
         foreach (var file in files)
         {
@@ -214,10 +241,7 @@
                 
                 // Convertemos para string Base64
                 var base64 = Convert.ToBase64String(ms.ToArray());
-                var finalString = $"data:{file.ContentType};base64,{base64}";
-
-                // Adicionamos à lista visual
-                _tempImagePreviews.Add(finalString);
+                _tempImagePreviews.Add($"data:{file.ContentType};base64,{base64}");
             }
             catch (Exception ex)
             {
@@ -225,49 +249,54 @@
             }
         }
     }
+    
+    private void RemoveNewImage(int index) => _tempImagePreviews.RemoveAt(index);
 
-    private void RemoveImage(int index)
+    private async Task DeleteExistingImage(ProductImageDto img)
     {
-        if (index >= 0 && index < _tempImagePreviews.Count)
+        var confirm = await JsRuntime.InvokeAsync<bool>("confirm", "Tem a certeza que quer apagar este produto?");
+        if (!confirm) 
+            return;
+
+        try
         {
-            _tempImagePreviews.RemoveAt(index);
+            var response = await Http.DeleteAsync($"api/Product/images/{img.Id}");
+            if (response.IsSuccessStatusCode)
+            {
+                _existingImages.Remove(img);
+            }
+        }
+        catch (Exception ex) 
+        {
+            _errorMessage = "Erro ao apagar imagem.";
         }
     }
 
     private async Task SaveProduct()
     {
         _isSubmitting = true;
-        _errorMessage = string.Empty;
 
         try
         {
-            if (string.IsNullOrEmpty(_newProductDto.SupplierId))
-            {
-                _errorMessage = "Erro: Fornecedor não identificado. Faça login novamente.";
-                return;
-            }
-
-            if (_newProductDto.CategoryId == 0)
-            {
-                 _errorMessage = "Erro: Selecione uma categoria válida.";
-                 return;
-            }
-
-            // --- O PASSO CRÍTICO ---
-            // Copiamos as strings Base64 da pré-visualização para o DTO que será enviado
             _newProductDto.NewImagesBase64 = new List<string>(_tempImagePreviews);
-
-            // Enviamos o DTO (que agora é um JSON grande contendo as imagens) para a API
-            var response = await Http.PostAsJsonAsync("api/Products", _newProductDto);
-
-            if (response.IsSuccessStatusCode)
+            HttpResponseMessage response;
+            if (ProductId.HasValue && ProductId.Value > 0)
             {
-                NavManager.NavigateTo("/"); 
+                response = await Http.PutAsJsonAsync($"api/Product/{ProductId.Value}", _newProductDto);
             }
             else
             {
-                var erroContent = await response.Content.ReadAsStringAsync();
-                _errorMessage = $"Erro da API ({response.StatusCode}): {erroContent}";
+                response = await Http.PostAsJsonAsync("api/Product", _newProductDto);
+            }
+
+            if (response.IsSuccessStatusCode)
+            {
+                NavManager.NavigateTo("/");
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                _errorMessage = $"Erro ({response.StatusCode}): {error}";
             }
         }
         catch (Exception ex)
@@ -278,5 +307,12 @@
         {
             _isSubmitting = false;
         }
+    }
+    // Auxiliar para montar URL da imagem
+    private string GetFullUrl(string path)
+    {
+        if (path.StartsWith("http")) 
+            return path;
+        return $"{Http.BaseAddress}{path.TrimStart('/')}";
     }
 }

@@ -22,7 +22,7 @@ public static class MauiProgram
         {
             // Endereço base da API
             string apiAddress;
-            // var devTunnelUrl = "";
+            // var devTunnelUrl = "https://wq2vf142-7004.uks1.devtunnels.ms";
 
             // Lógica para decidir o endereço
             if (DeviceInfo.Platform == DevicePlatform.Android)
