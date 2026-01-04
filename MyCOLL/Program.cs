@@ -92,6 +92,17 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowBlazorOrigin",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5177", "https://localhost:7045") // <--- Coloque aqui a porta do seu projeto MyCOLL.Web
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
 var app = builder.Build();
 
 // Seed initial Roles and Admin user
@@ -117,6 +128,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowBlazorOrigin");
 
 // 1. Permite servir ficheiros da própria pasta wwwroot da API (padrão)
 app.UseStaticFiles(); 

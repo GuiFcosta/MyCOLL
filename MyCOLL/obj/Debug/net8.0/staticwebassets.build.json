@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "xlwG0p74uuNYOv1dPwoeEmhOwl/JX2RbPhJqQaCr1AU=",
+  "Hash": "N/P+jteTN6hrUBUdibATF/bqUY82/zvenKwXNupqNbM=",
   "Source": "MyCOLL",
   "BasePath": "_content/MyCOLL",
   "Mode": "Default",
@@ -93,12 +93,12 @@
       "OriginalItemSpec": "C:\\Users\\gbigu\\RiderProjects\\MyCOLL\\MyCOLL\\obj\\Debug\\net8.0\\scopedcss\\bundle\\MyCOLL.styles.css"
     },
     {
-      "Identity": "C:\\Users\\gbigu\\RiderProjects\\MyCOLL\\MyCOLL\\wwwroot\\product-images\\1e05c102-96b3-4172-a1e7-515e2a7cdd2a.jpg",
+      "Identity": "C:\\Users\\gbigu\\RiderProjects\\MyCOLL\\MyCOLL\\wwwroot\\product-images\\5836573d-d57b-40cb-b638-511cf1f4ed78.png",
       "SourceId": "MyCOLL",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\gbigu\\RiderProjects\\MyCOLL\\MyCOLL\\wwwroot\\",
       "BasePath": "_content/MyCOLL",
-      "RelativePath": "product-images/1e05c102-96b3-4172-a1e7-515e2a7cdd2a.jpg",
+      "RelativePath": "product-images/5836573d-d57b-40cb-b638-511cf1f4ed78.png",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -109,7 +109,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\product-images\\1e05c102-96b3-4172-a1e7-515e2a7cdd2a.jpg"
+      "OriginalItemSpec": "wwwroot\\product-images\\5836573d-d57b-40cb-b638-511cf1f4ed78.png"
     },
     {
       "Identity": "C:\\Users\\gbigu\\RiderProjects\\MyCOLL\\MyCOLL\\wwwroot\\product-images\\8f12b9f8-656b-4d6b-90e6-d568d670608d.jpg",
@@ -129,6 +129,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\product-images\\8f12b9f8-656b-4d6b-90e6-d568d670608d.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\gbigu\\RiderProjects\\MyCOLL\\MyCOLL\\wwwroot\\product-images\\c182f5d6-68ef-4209-9866-26b30be16408.jpg",
+      "SourceId": "MyCOLL",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\gbigu\\RiderProjects\\MyCOLL\\MyCOLL\\wwwroot\\",
+      "BasePath": "_content/MyCOLL",
+      "RelativePath": "product-images/c182f5d6-68ef-4209-9866-26b30be16408.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\product-images\\c182f5d6-68ef-4209-9866-26b30be16408.jpg"
     }
   ]
 }
