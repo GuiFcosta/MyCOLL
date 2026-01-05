@@ -63,24 +63,21 @@
 
         try
         {
-            // 1. Chama a API
+            // post para a API de login
             var response = await Http.PostAsJsonAsync("api/auth/login", _loginModel);
 
             if (response.IsSuccessStatusCode)
             {
-                // 2. Lê a resposta (Token)
+                // lê a token
                 var result = await response.Content.ReadFromJsonAsync<AuthResponseDto>();
                 
                 if (result != null && !string.IsNullOrEmpty(result.Token))
                 {
-                    // 3. Atualiza o Estado de Autenticação (Chama o CustomProvider)
-                    // É necessário fazer o cast para o nosso tipo personalizado
+                    // atualiza o estado de Autenticação 
                     if (AuthStateProvider is IAuthService authService)
                     {
-                        // Este método deve guardar no SecureStorage e notificar a app
                         await authService.Login(result.Token);
                         
-                        // 4. Redireciona para a Home
                         NavManager.NavigateTo("/");
                     }
                     else 

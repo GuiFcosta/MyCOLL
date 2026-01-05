@@ -121,26 +121,21 @@ else
     }
     private static async Task DeleteCategoryRecursive(ApplicationDbContext context, int categoryId)
     {
-        // A. Encontrar todas as subcategorias diretas
         var children = await context.Categories
             .Where(c => c.ParentCategoryId == categoryId)
             .ToListAsync();
 
-        // B. Para cada filha, chamar este mesmo método (Recursão)
         foreach (var child in children)
         {
-            // Importante: Verificar se a filha tem produtos antes de tentar apagar
             var childHasProducts = await context.Products.AnyAsync(p => p.CategoryId == child.Id);
             if (childHasProducts)
             {
                 throw new Exception($"A subcategoria '{child.Name}' tem produtos. Remova os produtos primeiro.");
             }
         
-            // Mergulha mais fundo na árvore
             await DeleteCategoryRecursive(context, child.Id);
         }
 
-        // C. Depois de apagar os filhos, apaga o pai (o próprio ID)
         var categoryToDelete = await context.Categories.FindAsync(categoryId);
         if (categoryToDelete != null)
         {

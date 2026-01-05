@@ -17,7 +17,7 @@ public class CustomAuthStateProvider : AuthenticationStateProvider, IAuthService
     
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
-        // Tenta ler o token guardado no telemóvel
+        // tenta ler o token guardado no telemóvel
         var token = await SecureStorage.GetAsync("authToken");
 
         var identity = new ClaimsIdentity();
@@ -27,14 +27,14 @@ public class CustomAuthStateProvider : AuthenticationStateProvider, IAuthService
         {
             try
             {
-                // Se existe, cria a identidade do user
+                // se existe, cria a identidade do user
                 identity = new ClaimsIdentity(ParseClaimsFromJwt(token), "jwt");
                 _httpClient.DefaultRequestHeaders.Authorization = 
                     new AuthenticationHeaderValue("Bearer", token);
             }
             catch
             {
-                // Token inválido ou expirado
+                // token inválido ou expirado
                 SecureStorage.Remove("authToken");
             }
         }
@@ -43,18 +43,16 @@ public class CustomAuthStateProvider : AuthenticationStateProvider, IAuthService
         return new AuthenticationState(user);
     }
 
-    // Método chamado quando o user faz Login
     public async Task Login(string token)
     {
         await SecureStorage.SetAsync("authToken", token);
         
-        // Lógica de notificar o estado...
+        // notificar o estado
         var authenticatedUser = new ClaimsPrincipal(new ClaimsIdentity(ParseClaimsFromJwt(token), "jwt"));
         var authState = Task.FromResult(new AuthenticationState(authenticatedUser));
         NotifyAuthenticationStateChanged(authState);
     }
 
-    // Método chamado quando o user faz Logout
     public async Task Logout()
     {
         SecureStorage.Remove("authToken");
@@ -64,7 +62,7 @@ public class CustomAuthStateProvider : AuthenticationStateProvider, IAuthService
         NotifyAuthenticationStateChanged(authState);
     }
 
-    // Método auxiliar para ler o payload do JWT
+    // ler o payload do JWT
     private IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
     {
         var payload = jwt.Split('.')[1];

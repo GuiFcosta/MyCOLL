@@ -72,7 +72,6 @@
     {
         try
         {
-            // Busca as encomendas do endpoint que criámos no Passo 2
             _orders = await Http.GetFromJsonAsync<List<OrderDto>>("api/Order/my") ?? new List<OrderDto>();
         }
         catch (Exception ex)
@@ -85,17 +84,16 @@
         }
     }
 
-    // Método auxiliar para dar cor aos Badges consoante o estado
     private string GetStatusColor(string status)
     {
         return status.ToLower() switch
         {
-            "pending" => "bg-warning text-dark",    // Amarelo
-            "paid" => "bg-info text-dark",          // Azul Claro
-            "shipped" => "bg-primary",              // Azul Escuro
-            "delivered" => "bg-success",            // Verde
-            "cancelled" => "bg-danger",             // Vermelho
-            _ => "bg-secondary"                     // Cinzento (Padrão)
+            "pending" => "bg-warning text-dark",    // amarelo
+            "paid" => "bg-info text-dark",          // azul Claro
+            "shipped" => "bg-primary",              // azul Escuro
+            "delivered" => "bg-success",            // verde
+            "cancelled" => "bg-danger",             // vermelho
+            _ => "bg-secondary"                     // cinzento (Padrão)
         };
     }
 }

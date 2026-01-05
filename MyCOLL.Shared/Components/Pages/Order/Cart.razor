@@ -104,9 +104,9 @@
 </div>
 
 @code {
-    private bool _isProcessing = false;
+    private bool _isProcessing;
 
-    // Método auxiliar para imagens (igual ao da Home)
+    // método auxiliar para imagens
     private string GetFullUrl(string path)
     {
         if (path.StartsWith("http")) return path;
@@ -115,17 +115,14 @@
 
     private static void IncreaseQty(CartItem item)
     {
-        // Opcional: Verificar Stock máximo aqui
-        // if (item.Quantity < item.Product.Stock) 
-        item.Quantity++;
+        if (item.Quantity < item.Product.Stock) 
+            item.Quantity++;
     }
 
     private static void DecreaseQty(CartItem item)
     {
         if (item.Quantity > 1)
-        {
             item.Quantity--;
-        }
     }
 
     private async Task Checkout()
@@ -133,8 +130,7 @@
         _isProcessing = true;
         try
         {
-            // 1. Criar o DTO de Encomenda
-            // Nota: Criei este DTO abaixo (OrderCreateDto) para enviar para a API
+            // criar o DTO de encomenda
             var orderDto = new OrderCreateDto
             {
                 Items = CartService.Items.Select(i => new OrderItemDto 
@@ -144,21 +140,19 @@
                 }).ToList()
             };
 
-            // 2. Enviar para a API
+            // enviar para a API
             var response = await Http.PostAsJsonAsync("api/order", orderDto);
-
+            
             if (response.IsSuccessStatusCode)
             {
-                CartService.Clear(); // Limpa o carrinho
+                CartService.Clear(); 
                 await JsRuntime.InvokeVoidAsync("alert", "Encomenda realizada com sucesso!");
-                NavManager.NavigateTo("/order/history"); // Vai para o histórico
+                NavManager.NavigateTo("/order/history"); 
             }
             else
             {
-                // MUDANÇA IMPORTANTE: Ler o conteúdo do erro
                 var errorContent = await response.Content.ReadAsStringAsync();
                 Console.WriteLine($"ERRO API ({response.StatusCode}): {errorContent}");
-            
                 await JsRuntime.InvokeVoidAsync("alert", 
                     $"Falha ao criar: {response.StatusCode}. Veja o log.");
             }

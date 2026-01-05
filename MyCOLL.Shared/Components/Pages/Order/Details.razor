@@ -1,9 +1,169 @@
 @page "/order/details/{OrderId:int}"
+@using MyCOLL.Shared.Models.Dto
+@using Microsoft.AspNetCore.Authorization
 
-<div>
-    <h3>Detalhes</h3>
+@attribute [Authorize]
+@inject HttpClient Http
+@inject NavigationManager NavManager
+
+<div class="container mt-4 mb-5">
+    
+    <div class="d-flex align-items-center mb-4">
+        <button class="btn btn-outline-secondary me-3" @onclick="GoBack">
+            <i class="bi bi-arrow-left"></i> Voltar
+        </button>
+        <h3>Detalhes da Encomenda #@OrderId</h3>
+    </div>
+
+    @if (_isLoading)
+    {
+        <div class="d-flex justify-content-center mt-5">
+            <div class="spinner-border text-primary"></div>
+        </div>
+    }
+    else if (_order == null)
+    {
+        <div class="alert alert-warning">
+            Encomenda não encontrada ou não tem permissão para a visualizar.
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-white py-3">
+                        <h5 class="mb-0">📦 Itens da Encomenda</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th style="width: 100px;">Produto</th>
+                                        <th>Nome</th>
+                                        <th class="text-center">Qtd</th>
+                                        <th class="text-end">Preço Unit.</th>
+                                        <th class="text-end">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in _order.Items)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(item.ProductImage))
+                                                {
+                                                    <img src="@GetFullUrl(item.ProductImage)" 
+                                                         class="img-thumbnail" 
+                                                         style="width: 60px; height: 60px; object-fit: cover;" 
+                                                         alt="@item.ProductName"/>
+                                                }
+                                                else
+                                                {
+                                                    <div class="bg-light d-flex align-items-center justify-content-center border rounded" 
+                                                         style="width: 60px; height: 60px;">
+                                                        <i class="bi bi-image text-muted"></i>
+                                                    </div>
+                                                }
+                                            </td>
+                                            <td>
+                                                <span class="fw-bold">@item.ProductName</span>
+                                            </td>
+                                            <td class="text-center">@item.Quantity</td>
+                                            <td class="text-end">@item.UnitPrice.ToString("C")</td>
+                                            <td class="text-end fw-bold">
+                                                @((item.UnitPrice * item.Quantity).ToString("C"))
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card shadow-sm mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title text-muted mb-3">Estado do Pedido</h5>
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="badge @GetStatusColor(_order.Status) fs-6 p-2 w-100">
+                                @_order.Status
+                            </span>
+                        </div>
+                        <small class="text-muted">
+                            Data: @_order.OrderDate.ToLocalTime().ToString("dd/MM/yyyy HH:mm")
+                        </small>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title text-muted mb-3">Resumo Financeiro</h5>
+                        
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Subtotal</span>
+                            <span>@_order.TotalAmount.ToString("C")</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Portes de Envio</span>
+                            <span class="text-success">Grátis</span>
+                        </div>
+                        <hr />
+                        <div class="d-flex justify-content-between fs-5 fw-bold">
+                            <span>Total Pago</span>
+                            <span class="text-primary">@_order.TotalAmount.ToString("C")</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 </div>
 
 @code {
-    // TODO: Implement order details view
+    [Parameter] public int OrderId { get; set; }
+
+    private OrderDto? _order;
+    private bool _isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            _order = await Http.GetFromJsonAsync<OrderDto>($"api/Order/{OrderId}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao carregar detalhes: {ex.Message}");
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+
+    private void GoBack()
+    {
+        NavManager.NavigateTo("/order/history");
+    }
+
+    private string GetFullUrl(string path)
+    {
+        if (string.IsNullOrEmpty(path)) return "";
+        if (path.StartsWith("http")) return path;
+        return $"{Http.BaseAddress}{path.TrimStart('/')}";
+    }
+
+    private string GetStatusColor(string status) => status?.ToLower() switch
+    {
+        "pending" => "bg-warning text-dark",
+        "paid" => "bg-info text-dark",
+        "shipped" => "bg-primary",
+        "delivered" => "bg-success",
+        "cancelled" => "bg-danger",
+        _ => "bg-secondary"
+    };
 }

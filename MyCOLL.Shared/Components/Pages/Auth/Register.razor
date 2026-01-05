@@ -85,8 +85,7 @@
 </div>
 
 @code {
-    // Nota: Certifique-se que o RegisterDto tem a propriedade 'Role'
-    private RegisterDto _registerModel = new() { Role = UserRoles.Client }; // Default: Cliente
+    private RegisterDto _registerModel = new() { Role = UserRoles.Client }; // default: Cliente
     private string _errorMessage = string.Empty;
     private bool _isLoading = false;
 
@@ -97,12 +96,10 @@
 
         try
         {
-            // 1. Envia pedido para a API
             var response = await Http.PostAsJsonAsync("api/auth/register", _registerModel);
 
             if (response.IsSuccessStatusCode)
             {
-                // 2. Se a API retornar o Token logo no registo (Melhor UX)
                 var result = await response.Content.ReadFromJsonAsync<AuthResponseDto>();
 
                 if (result != null && !string.IsNullOrEmpty(result.Token))
@@ -116,13 +113,13 @@
                 }
                 else
                 {
-                    // Caso a API não retorne token (apenas 200 OK), redireciona para login
+                    // API não retorne token (200), redireciona para login
                     NavManager.NavigateTo("/auth/login");
                 }
             }
             else
             {
-                // Lê erro da API (ex: "Email já existe")
+                // erro da API (ex: "Email já existe")
                 var errorContent = await response.Content.ReadAsStringAsync();
                 _errorMessage = $"Erro ao registar: {errorContent}";
             }

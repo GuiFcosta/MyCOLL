@@ -16,6 +16,9 @@
             <div class="d-flex gap-3 text-white align-items-center">
                 <AuthorizeView Roles="Fornecedor">
                     <Authorized>
+                        <a href="/sales/history" class="text-white text-decoration-none">
+                            🛍️ Minhas Vendas
+                        </a>
                         <a href="/products/list" class="text-white text-decoration-none">
                             📦 Meus Produtos
                         </a>
@@ -79,7 +82,6 @@
 @code {
     private bool _collapseMainMenu = false;
 
-    // 4. LÓGICA PARA ATUALIZAR SOZINHO
     protected override void OnInitialized()
     {
         // Diz ao Layout: "Quando o carrinho mudar, avisa"

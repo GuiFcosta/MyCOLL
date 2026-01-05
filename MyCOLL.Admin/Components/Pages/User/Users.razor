@@ -1,5 +1,6 @@
 @page "/users"
 
+@using System.Security.Claims
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.EntityFrameworkCore
@@ -8,6 +9,7 @@
 
 @inject UserManager<ApplicationUser> UserManager
 @inject NavigationManager NavManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 @attribute [Authorize(Roles = UserRoles.Admin + "," + UserRoles.Employee)]
 
@@ -38,7 +40,7 @@ else
                     <td>@user.Email</td>
                     <td>@user.FullName</td>
                     <td>
-                        @* Mostra a role do utilizador (uma string separada por vírgulas se tiver várias) *@
+                        @* Role do utilizador *@
                         @(_userRolesMap.ContainsKey(user.Id) ? string.Join(", ", _userRolesMap[user.Id]) : "Carregando...")
                     </td>
                     <td>
@@ -52,17 +54,20 @@ else
                         }
                     </td>
                     <td>
-                        @* Botão de Ativar/Desativar - Requisito  *@
-                        @if (user.StateAccount == StateAccount.Active)
+                        @* Ativar/Desativar *@
+                        @if (CanToggleUserStatus(user))
                         {
-                            <button class="btn btn-sm btn-warning" @onclick="() => ToggleUserStatus(user)">Suspender</button>
+                            @if (user.StateAccount == StateAccount.Active)
+                            {
+                                <button class="btn btn-sm btn-warning" @onclick="() => ToggleUserStatus(user)">Suspender</button>
+                            }
+                            else
+                            {
+                                <button class="btn btn-sm btn-success" @onclick="() => ToggleUserStatus(user)">Ativar</button>
+                            }
                         }
-                        else
-                        {
-                            <button class="btn btn-sm btn-success" @onclick="() => ToggleUserStatus(user)">Ativar</button>
-                        }
-
-                        @* Botão para promover a Funcionário (Apenas Admin vê)  *@
+                        
+                        @* (Apenas Admin vê)  *@
                         <AuthorizeView Roles="@UserRoles.Admin" Context="authContext">
                             <button class="btn btn-sm btn-info ms-2" @onclick="() => ManageRoles(user)">Gerir Roles</button>
                         </AuthorizeView>
@@ -76,9 +81,14 @@ else
 @code {
     private List<ApplicationUser>? _users;
     private Dictionary<string, IList<string>> _userRolesMap = new();
+    private ClaimsPrincipal? _currentUser;
+    private bool _isCurrentUserAdmin;
     
     protected override async Task OnInitializedAsync()
     {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        _currentUser = authState.User;
+        _isCurrentUserAdmin = _currentUser.IsInRole(UserRoles.Admin);
         await LoadUsers();
     }
     
@@ -92,10 +102,43 @@ else
             _userRolesMap[user.Id] = roles;
         }
     }
-    
+
+    private bool CanToggleUserStatus(ApplicationUser targetUser)
+    {
+        if (_currentUser == null) return false;
+
+        var currentUserId = _currentUser.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (targetUser.Id == currentUserId)
+        {
+            return false;
+        }
+
+        if (_isCurrentUserAdmin)
+        {
+            return true;
+        }
+
+        if (_currentUser.IsInRole(UserRoles.Employee))
+        {
+            var targetUserRoles = _userRolesMap.GetValueOrDefault(targetUser.Id);
+            if (targetUserRoles == null) return false;
+
+            // não pode gerir Admins
+            if (targetUserRoles.Contains(UserRoles.Admin))
+            {
+                return false;
+            }
+
+            // só pode gerir clientes ou fornecedores
+            return targetUserRoles.Contains(UserRoles.Client) || targetUserRoles.Contains(UserRoles.Supplier);
+        }
+
+        return false;
+    }
+
     private async Task ToggleUserStatus(ApplicationUser user)
     {
-        // Inverte o estado
+        // inverte o estado
         var previousState = user.StateAccount;
         user.StateAccount = previousState == StateAccount.Suspended 
             ? StateAccount.Active : StateAccount.Suspended;
@@ -104,9 +147,7 @@ else
         
         if (!result.Succeeded)
         {
-            // Aqui poderia adicionar um toast/alerta de erro
             Console.WriteLine("Erro ao atualizar estado");
-            // Reverte visualmente em caso de erro
             user.StateAccount = previousState;
         }
     }

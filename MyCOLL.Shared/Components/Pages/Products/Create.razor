@@ -99,10 +99,6 @@
                             <InputCheckbox @bind-Value="_newProductDto.IsUsed" class="form-check-input" id="checkUsed" />
                             <label class="form-check-label" for="checkUsed">Artigo Usado</label>
                         </div>
-                        <div class="form-check form-check-inline">
-                            <InputCheckbox @bind-Value="_newProductDto.IsActive" class="form-check-input" id="checkActive" />
-                            <label class="form-check-label" for="checkActive">Ativo (Visível)</label>
-                        </div>
                      </div>
                  </div>
 
@@ -163,7 +159,7 @@
     
     private ProductDto _newProductDto = new() 
     { 
-        IsActive = true, 
+        IsActive = false, 
         ProductType = ProductType.Colecionável, 
         AvailabilityMode = AvailabilityMode.Venda
     };
@@ -194,7 +190,6 @@
                 var existingProduct = await Http.GetFromJsonAsync<ProductDto>($"api/Product/{ProductId.Value}");
                 if (existingProduct != null)
                 {
-                    // Mapeamos de DTO Leitura -> DTO Criação/Edição
                     _newProductDto = new ProductDto
                     {
                         Id = existingProduct.Id,
@@ -207,7 +202,7 @@
                         ProductType = existingProduct.ProductType,
                         AvailabilityMode = existingProduct.AvailabilityMode,
                         IsUsed = existingProduct.IsUsed,
-                        IsActive = existingProduct.IsActive,
+                        IsActive = false,
                         SupplierId = existingProduct.SupplierId
                     };
                     

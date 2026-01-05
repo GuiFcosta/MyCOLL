@@ -22,18 +22,16 @@ public static class MauiProgram
         {
             // Endereço base da API
             string apiAddress;
-            // var devTunnelUrl = "https://wq2vf142-7004.uks1.devtunnels.ms";
+            var devTunnelUrl = "https://1l34c7z5-7004.uks1.devtunnels.ms";
 
-            // Lógica para decidir o endereço
             if (DeviceInfo.Platform == DevicePlatform.Android)
             {
-                // No Emulador Android, o "localhost" do PC é 10.0.2.2
-                // IMPORTANTE: Usa a porta 5048 (HTTP) que vimos no Swagger
-                apiAddress = "http://10.0.2.2:5048"; 
+                // Android Emulator
+                apiAddress = devTunnelUrl;
             }
             else
             {
-                // No Windows, é localhost normal
+                // Windows Machine
                 apiAddress = "https://localhost:7004"; 
             }
 

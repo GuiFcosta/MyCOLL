@@ -19,10 +19,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // OBRIGATÓRIO: Configura as tabelas do Identity (Users, Roles, etc.)
         base.OnModelCreating(modelBuilder);
 
-        // --- Configuração Global de Precisão para Dinheiro ---
         // Evita o erro: "Decimal property 'Price' ... no type specified"
         foreach (var property in modelBuilder.Model.GetEntityTypes()
             .SelectMany(t => t.GetProperties())
@@ -35,7 +33,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         // --- Configurações da Entidade Product ---
         modelBuilder.Entity<Product>(entity =>
         {
-            // Relação com Fornecedor (User)
+            // Relação com Fornecedor
             entity.HasOne(p => p.Supplier)
                 .WithMany(u => u.Products)
                 .HasForeignKey(p => p.SupplierId)
@@ -70,7 +68,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         // --- Configurações da Entidade OrderItem ---
         modelBuilder.Entity<OrderItem>(entity =>
         {
-            // TRAVA DE SEGURANÇA CRÍTICA:
             // Impede que um produto seja apagado do banco se ele estiver numa encomenda.
             entity.HasOne(oi => oi.Product)
                 .WithMany(p => p.OrderItems)

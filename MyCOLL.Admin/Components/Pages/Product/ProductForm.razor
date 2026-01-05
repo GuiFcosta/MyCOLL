@@ -18,15 +18,12 @@
 <EditForm Model="Product" OnValidSubmit="HandleSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
-
-    @* Linha 1: Nome e Categoria *@
     <div class="row">
         <div class="col-md-6 mb-3">
             <label class="form-label">Nome do Produto</label>
             <InputText class="form-control" @bind-Value="Product.Name" placeholder="Ex: Moeda Rara" />
             <ValidationMessage For="() => Product.Name"/>
         </div>
-        
         <div class="col-md-6 mb-3">
             <label class="form-label">Categoria</label>
             <InputSelect class="form-select" @bind-Value="Product.CategoryId">
@@ -47,8 +44,6 @@
         <InputTextArea class="form-control" @bind-Value="Product.Description" rows="3" />
         <ValidationMessage For="() => Product.Description"/>
     </div>
-
-    @* Linha 2: Preços e Stock *@
     <div class="row">
         <div class="col-md-4 mb-3">
             <label class="form-label">Preço Base (€)</label>
@@ -68,7 +63,6 @@
         </div>
     </div>
     
-    @* Linha 3: Enums (Tipo e Disponibilidade) *@
     <div class="row">
         <div class="col-md-6 mb-3">
             <label class="form-label">Tipo de Produto</label>
@@ -79,7 +73,6 @@
                 }
             </InputSelect>
         </div>
-
         <div class="col-md-6 mb-3">
             <label class="form-label">Disponibilidade</label>
             <InputSelect @bind-Value="Product.AvailabilityMode" class="form-select">
@@ -91,7 +84,6 @@
         </div>
     </div>
 
-    @* Linha 4: Fornecedor e Checkboxes *@
     <div class="row align-items-center">
         <div class="col-md-6 mb-3">
             <label class="form-label">Fornecedor (Supplier):</label>
@@ -106,7 +98,6 @@
                 }
             </InputSelect>
         </div>
-        
         <div class="col-md-6 mb-3">
             <div class="form-check form-check-inline">
                 <InputCheckbox class="form-check-input" @bind-Value="Product.IsUsed" id="checkUsed"/>
@@ -119,13 +110,10 @@
         </div>
     </div>
     
-    @* Área de Imagens *@
     <div class="mb-4 border p-3 rounded bg-light">
         <label class="form-label fw-bold">Imagens do Produto</label>
         <InputFile OnChange="OnInputFileChange" multiple class="form-control mb-2" accept="image/*"/>
-        
         <div class="d-flex flex-wrap gap-3">
-            @* 1. Imagens já existentes na BD *@
             @foreach (var image in Product.Images)
             {
                 <div class="card shadow-sm" style="width: 120px;">
@@ -137,8 +125,6 @@
                     </div>
                 </div>
             }
-            
-            @* 2. Pré-visualização de NOVAS imagens *@
             @foreach (var preview in _tempImagePreviews)
             {
                 <div class="card shadow-sm border-success" style="width: 120px;">
@@ -219,10 +205,8 @@
 
         foreach (var file in files)
         {
-            // 1. Adiciona à lista oficial que será salva
             _selectedFiles.Add(file);
 
-            // 2. Gera preview para UI (lendo stream para memória)
             try 
             {
                 var buffer = new byte[file.Size];
@@ -250,17 +234,14 @@
 
     private async Task RemoveDbImage(ProductImage image)
     {
-        // Remove da lista em memória para atualizar UI instantaneamente
         Product.Images.Remove(image);
 
-        // Se a imagem já existe na BD (Id > 0), removemos fisicamente
         if (image.Id > 0)
         {
             await using var context = DbFactory.CreateDbContext();
             context.Remove(image); // Remove da tabela ProductImages
             await context.SaveChangesAsync();
 
-            // Apaga ficheiro do disco
             var imagePath = Path.Combine(Env.WebRootPath, image.ImageUrl.TrimStart('/'));
             if (File.Exists(imagePath))
             {
@@ -272,8 +253,7 @@
     private async Task HandleSubmit()
     {
         await using var context = DbFactory.CreateDbContext();
-
-        // 1. Processar Upload de Novas Imagens
+        
         if (_selectedFiles.Any())
         {
             var uploadPath = Path.Combine(Env.WebRootPath, "product-images");
@@ -293,13 +273,12 @@
                 Product.Images.Add(new ProductImage
                 {
                     ImageUrl = $"/product-images/{fileName}",
-                    IsPrimary = !Product.Images.Any() // Se for a primeira, é primária
+                    IsPrimary = !Product.Images.Any() // Primeira imagem é a primary
                 });
             }
         }
 
-        // 2. Guardar Produto (Insert ou Update)
-        // Nota: Como o contexto é novo, precisamos anexar ou atualizar com cuidado
+        // Guardar Produto (add ou update)
         if (Product.Id == 0)
         { 
             context.Products.Add(Product); 
@@ -311,7 +290,6 @@
 
         await context.SaveChangesAsync();
         
-        // Limpar listas temporárias
         _selectedFiles.Clear();
         _tempImagePreviews.Clear();
 

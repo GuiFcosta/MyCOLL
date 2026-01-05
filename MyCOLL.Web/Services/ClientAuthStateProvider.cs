@@ -1,7 +1,7 @@
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text.Json;
-using Blazored.LocalStorage; // <--- O SEGREDO
+using Blazored.LocalStorage; 
 using Microsoft.AspNetCore.Components.Authorization;
 using MyCOLL.Shared.Interface;
 
@@ -20,36 +20,34 @@ public class ClientAuthStateProvider : AuthenticationStateProvider, IAuthService
 
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
-        // 1. Tentar ler o token do navegador
+        // ler o token do navegador
         var token = await _localStorage.GetItemAsync<string>("authToken");
 
-        // 2. Se não houver token, o utilizador é anónimo
+        // se não houver token, o utilizador é anónimo
         if (string.IsNullOrWhiteSpace(token))
         {
             return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
         }
 
-        // 3. Se houver token, configurar o HttpClient para o usar sempre
+        // se houver token, configurar o HttpClient para o usar sempre
         _http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
 
-        // 4. Ler as claims (dados) de dentro do token e avisar a App que estamos logados
+        // ler as claims (dados) de dentro do token e avisar a App que estamos logados
         return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(ParseClaimsFromJwt(token), "jwt")));
     }
     
-    // 2. Implemente o método Login
     public async Task Login(string token)
     {
-        // Guardar no LocalStorage
+        // guardar no LocalStorage
         await _localStorage.SetItemAsync("authToken", token);
         
-        // Configurar Header
+        // configurar Header
         _http.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("bearer", token);
         
-        // Avisar a App que mudou o estado
+        // avisar a App que mudou o estado
         NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
     }
 
-    // 3. Implemente o método Logout
     public async Task Logout()
     {
         await _localStorage.RemoveItemAsync("authToken");
@@ -57,7 +55,6 @@ public class ClientAuthStateProvider : AuthenticationStateProvider, IAuthService
         NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
     }
 
-    // Método auxiliar para ler o Token (igual ao que já deve ter no MAUI)
     private IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
     {
         var payload = jwt.Split('.')[1];

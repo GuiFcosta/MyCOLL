@@ -28,10 +28,22 @@ public class OrderRepository : IOrderRepository
             .OrderByDescending(o => o.OrderDate)
             .ToListAsync();
     }
+    public async Task<IEnumerable<OrderItem>> GetSalesBySupplier(string supplierId)
+    {
+        return await _context.OrderItems
+            .Include(oi => oi.Order)             // Para saber a data e o cliente
+            .ThenInclude(o => o.Client)      // Para saber o nome do cliente
+            .Include(oi => oi.Product)           // Para saber o nome e imagem do produto
+            .Where(oi => oi.Product.SupplierId == supplierId) // FILTRO CRÍTICO
+            .OrderByDescending(oi => oi.Order.OrderDate)
+            .ToListAsync();
+    }
     public async Task<Order?> GetOrderById(int id)
     {
         return await _context.Orders
             .Include(o => o.Items)
+            .ThenInclude(i => i.Product)    
+            .ThenInclude(p => p.Images)
             .FirstOrDefaultAsync(o => o.Id == id);
     }
     public async Task<Product?> GetProductById(int id)

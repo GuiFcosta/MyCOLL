@@ -64,7 +64,6 @@ else
     <table class="table table-hover align-middle">
         <thead class="table-light">
             <tr>
-                <th>Imagem</th>
                 <th>Nome</th>
                 <th>Categoria</th>
                 <th>Preço Base</th>
@@ -79,14 +78,6 @@ else
             @foreach (var product in _productsList)
             {
                 <tr>
-                    <td>
-                        @if (product.Images.Any())
-                        {
-                            <img src="@product.Images.First().ImageUrl" width="50" height="50" style="object-fit:cover" class="rounded"  alt=""/>
-                        }
-                        else
-                        { <span class="text-muted small">Sem img</span> }
-                    </td>
                     <td>@product.Name</td>
                     <td>@product.Category?.Name</td>
                     <td>@product.BasePrice.ToString("C")</td>
@@ -141,19 +132,19 @@ else
             .Include(p => p.Images)
             .AsQueryable();
 
-        // 1. Filtrar por Nome
+        // Filtrar por Nome
         if (!string.IsNullOrWhiteSpace(_searchText))
         {
             query = query.Where(p => p.Name.Contains(_searchText));
         }
         
-        // 2. Filtrar por Categoria
+        // Filtrar por Categoria
         if (_selectedCategoryId > 0)
         {
             query = query.Where(p => p.CategoryId == _selectedCategoryId);
         }
 
-        // 3. Ordenação
+        // Ordenação
         query = _sortOption switch
         {
             "price_asc" => query.OrderBy(p => p.BasePrice),

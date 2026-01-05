@@ -30,12 +30,35 @@ public class OrderController : ControllerBase
 
     // GET: api/Order/5
     [HttpGet("{id}")]
-    public async Task<ActionResult<Order>> GetOrderById(int id)
+    public async Task<ActionResult<OrderDto>> GetOrderById(int id)
     {
         var order = await _orderRepository.GetOrderById(id);
-        if (order == null)
-            return NotFound();
-        return Ok(order);
+        if (order == null) return NotFound();
+
+        // Verificação de segurança: O cliente só pode ver a SUA encomenda
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (order.ClientId != userId && !User.IsInRole(UserRoles.Admin)) 
+            return Forbid();
+
+        var orderDto = new OrderDto
+        {
+            Id = order.Id,
+            OrderDate = order.OrderDate,
+            TotalAmount = order.TotalAmount,
+            Status = order.Status.ToString(),
+            Items = order.Items.Select(i => new OrderItemDto
+            {
+                ProductId = i.ProductId,
+                Quantity = i.Quantity,
+                UnitPrice = i.UnitPrice,
+                // Certifique-se que adicionou estas propriedades ao OrderItemDto:
+                ProductName = i.Product.Name, 
+                ProductImage = i.Product.Images?.FirstOrDefault(img => img.IsPrimary)?.ImageUrl 
+                               ?? i.Product.Images?.FirstOrDefault()?.ImageUrl
+            }).ToList()
+        };
+
+        return Ok(orderDto);
     }
     
     // GET: api/Order/my
@@ -64,6 +87,36 @@ public class OrderController : ControllerBase
         });
 
         return Ok(orderDtos);
+    }
+    
+    // GET: api/Order/sales
+    [HttpGet("sales")]
+    [Authorize(Roles = UserRoles.Supplier)] // Apenas fornecedores
+    public async Task<ActionResult<IEnumerable<SupplierSaleDto>>> GetMySales()
+    {
+        // 1. Identificar quem está logado
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userId)) return Unauthorized();
+
+        // 2. Buscar os itens vendidos por este utilizador
+        var items = await _orderRepository.GetSalesBySupplier(userId);
+
+        // 3. Mapear para DTO
+        var salesDtos = items.Select(item => new SupplierSaleDto
+        {
+            OrderId = item.OrderId,
+            OrderDate = item.Order.OrderDate,
+            ProductName = item.Product.Name,
+            // Tenta pegar a imagem principal, senão string vazia
+            ProductImage = item.Product.Images?.FirstOrDefault(i => i.IsPrimary)?.ImageUrl 
+                           ?? item.Product.Images?.FirstOrDefault()?.ImageUrl,
+            Quantity = item.Quantity,
+            UnitPrice = item.UnitPrice,
+            Status = item.Order.Status.ToString(),
+            ClientName = item.Order.Client?.FullName ?? "Anónimo"
+        });
+
+        return Ok(salesDtos);
     }
     
     // POST: api/Order
