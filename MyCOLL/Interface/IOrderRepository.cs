@@ -5,6 +5,7 @@ namespace MyCOLL.Interface;
 public interface IOrderRepository
 {
     Task<IEnumerable<Order>> GetAllOrders();
+    Task<IEnumerable<Order>> GetOrdersByUserId(string userId);
     Task<Order?> GetOrderById(int id);
     Task<Product?> GetProductById(int id);
     Task AddOrder(Order order);

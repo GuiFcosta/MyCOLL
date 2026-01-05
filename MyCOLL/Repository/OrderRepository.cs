@@ -20,13 +20,20 @@ public class OrderRepository : IOrderRepository
             .OrderByDescending(o => o.OrderDate)
             .ToListAsync();
     }
+    public async Task<IEnumerable<Order>> GetOrdersByUserId(string userId)
+    {
+        return await _context.Orders
+            .Include(o => o.Items)
+            .Where(o => o.ClientId == userId)
+            .OrderByDescending(o => o.OrderDate)
+            .ToListAsync();
+    }
     public async Task<Order?> GetOrderById(int id)
     {
         return await _context.Orders
             .Include(o => o.Items)
             .FirstOrDefaultAsync(o => o.Id == id);
     }
-
     public async Task<Product?> GetProductById(int id)
     {
         var product = await _context.Products.FindAsync(id);

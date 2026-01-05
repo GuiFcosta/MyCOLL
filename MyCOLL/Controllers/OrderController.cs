@@ -20,7 +20,7 @@ public class OrderController : ControllerBase
         _orderRepository = orderRepository;
     }
     
-    // GET: api/order
+    // GET: api/Order
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
     {
@@ -28,7 +28,7 @@ public class OrderController : ControllerBase
         return Ok(orders);
     }
 
-    // GET: api/order/5
+    // GET: api/Order/5
     [HttpGet("{id}")]
     public async Task<ActionResult<Order>> GetOrderById(int id)
     {
@@ -38,7 +38,35 @@ public class OrderController : ControllerBase
         return Ok(order);
     }
     
-    // POST: api/order
+    // GET: api/Order/my
+    [HttpGet("my")]
+    [Authorize(Roles = UserRoles.Client)]
+    public async Task<ActionResult<IEnumerable<OrderDto>>> GetMyOrders()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userId)) return Unauthorized();
+
+        var orders = await _orderRepository.GetOrdersByUserId(userId);
+
+        // Mapear para DTO (Crucial para evitar loops de JSON e enviar dados limpos)
+        var orderDtos = orders.Select(o => new OrderDto
+        {
+            Id = o.Id,
+            OrderDate = o.OrderDate,
+            TotalAmount = o.TotalAmount,
+            Status = o.Status.ToString(), // Converte Enum para String
+            Items = o.Items.Select(i => new OrderItemDto
+            {
+                ProductId = i.ProductId,
+                Quantity = i.Quantity,
+                // Pode adicionar ProductName aqui no DTO se quiser mostrar na lista
+            }).ToList()
+        });
+
+        return Ok(orderDtos);
+    }
+    
+    // POST: api/Order
     [HttpPost]
     [Authorize(Roles = UserRoles.Client)]
     public async Task<ActionResult<OrderDto>> PostOrder([FromBody] OrderCreateDto orderDto)
@@ -48,7 +76,7 @@ public class OrderController : ControllerBase
             Console.WriteLine("--- INICIANDO CRIAÇÃO DE ENCOMENDA ---");
 
             // 1. Validar Carrinho
-            if (orderDto.Items == null || !orderDto.Items.Any())
+            if (orderDto.Items.Count == 0 || !orderDto.Items.Any())
                 return BadRequest("O carrinho está vazio.");
 
             // 2. Validar Utilizador (Causa comum de erro 500)
@@ -99,9 +127,9 @@ public class OrderController : ControllerBase
             order.TotalAmount = totalAmount;
 
             // 5. Tentar Guardar (Aqui é onde costuma dar erro de SQL)
-            Console.WriteLine("A tentar guardar na Base de Dados...");
-            await _orderRepository.AddOrder(order);
-            Console.WriteLine($"Sucesso! Order ID gerado: {order.Id}");
+            Console.WriteLine("A tentar guardar na Base de Dados..."); // Imprime
+            await _orderRepository.AddOrder(order); // Esta linha lança exceção
+            Console.WriteLine($"Sucesso! Order ID gerado: {order.Id}"); // Não imprime
 
             // 6. Preparar Resposta
             var orderResponseDto = new OrderDto

@@ -34,8 +34,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xPcmRlclxDYXJ0LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/gbigu/RiderProjects/MyCOLL/MyCOLL.Shared/Components/Pages/Order/Details.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xPcmRlclxEZXRhaWxzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/gbigu/RiderProjects/MyCOLL/MyCOLL.Shared/Components/Pages/Order/History.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xPcmRlclxIaXN0b3J5LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/gbigu/RiderProjects/MyCOLL/MyCOLL.Shared/Components/Pages/Order/Sales.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xPcmRlclxTYWxlcy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/gbigu/RiderProjects/MyCOLL/MyCOLL.Shared/Components/Pages/Products/CategoryProducts.razor]
@@ -44,10 +52,6 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/gbigu/RiderProjects/MyCOLL/MyCOLL.Shared/Components/Pages/Products/Create.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xQcm9kdWN0c1xDcmVhdGUucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/gbigu/RiderProjects/MyCOLL/MyCOLL.Shared/Components/Pages/Products/Details.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xQcm9kdWN0c1xEZXRhaWxzLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/gbigu/RiderProjects/MyCOLL/MyCOLL.Shared/Components/Pages/Products/List.razor]
@@ -69,7 +73,3 @@ build_metadata.AdditionalFiles.CssScope =
 [C:/Users/gbigu/RiderProjects/MyCOLL/MyCOLL.Shared/Components/Layout/MainLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTWFpbkxheW91dC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-j665csx7zi
-
-[C:/Users/gbigu/RiderProjects/MyCOLL/MyCOLL.Shared/Components/Layout/NavMenu.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTmF2TWVudS5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = b-ifvlufm8wr
