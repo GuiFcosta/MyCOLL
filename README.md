@@ -69,7 +69,7 @@ The solution follows a modular architecture sharing 90% of the UI code between W
    
 ### 2. Running the API
 - Set MyCOLL as the startup project and run it.
-- It usually runs on http://localhost:5276 (check launchSettings.json).
+- It usually runs on https://localhost:7004 (check launchSettings.json).
 
 ### 3. Running the Frontend
 - Web: Set MyCOLL.Web as startup and run.
