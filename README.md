@@ -1,33 +1,82 @@
-# MyCOLL
-PROJETO: MyCOLL - Plataforma de Colecionáveis
-ALUNO: Guilherme Farias Costa
+# MyCOLL - Collectibles Marketplace Platform 🪙📦
 
---- INSTRUÇÕES DE BASE DE DADOS ---
-O ficheiro "BaseDeDadosMyCOLL.sql", encontra-se na pasta "BaseDeDados" e pode ser executado no SQL Server.
+![.NET](https://img.shields.io/badge/.NET-8.0-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
+![Blazor](https://img.shields.io/badge/Blazor-WebAssembly-512BD4?style=for-the-badge&logo=blazor&logoColor=white)
+![MAUI](https://img.shields.io/badge/MAUI-Multi--Platform-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
+![SQL Server](https://img.shields.io/badge/SQL%20Server-CC2927?style=for-the-badge&logo=microsoft-sql-server&logoColor=white)
 
---- CONNECTION STRING ---
-Verifique o ficheiro appsettings.json na API. 
-Por defeito está configurado para: (localdb)\mssqllocaldb
+**MyCOLL** is a robust cross-platform solution developed for buying and selling collectibles (Numismatics, Philately, and others). It features a unified ecosystem allowing Suppliers to manage their inventory and Sales, and Clients to browse and purchase items seamlessly across Web and Mobile devices.
 
---- CREDENCIAIS DE TESTE ---
-Para testar as funcionalidades, utilize estes utilizadores já criados (ou crie novos):
+## 🚀 Key Features
 
-1. ADMINISTRADOR (Gerir loja - MyCOLL.Admin):
-   Email: admin@mycoll.com
-   Pass:  Admin@123
+### 🛒 For Clients
+- **Product Browsing:** Filter items by category (Coins, Stamps, etc.), price, and condition.
+- **Shopping Cart:** Add items, manage quantities, and proceed to checkout.
+- **Order Management:** View full order history with status tracking (Pending, Paid, Shipped, Delivered).
+- **Order Details:** Detailed view of purchased items, quantities, and totals.
+- **Cross-Platform:** Access the same account and cart from the Web or Mobile App.
 
-1. FUNCIONÁRIO (Gerir loja - MyCOLL.Admin):
-   Email: gui@email.com
-   Pass:  Gui123@
+### 📦 For Suppliers
+- **Product Management:** Create, edit, and delete products with image support (Base64 handling).
+- **Stock Control:** Real-time stock updates. Automatic deduction upon shipment.
+- **Sales Dashboard:** View sales history, calculate total revenue, and track items sold.
+- **Order Fulfillment:** Confirm payments, ship orders, and handle cancellations (with stock rollback logic).
 
-3. FORNECEDOR (Para gerir produtos e vendas):
-   Email: braga@email.com
-   Pass:  Braga123@
+### 🔐 Security & Architecture
+- **Authentication:** JWT (JSON Web Tokens) based authentication.
+- **Role-Based Access Control (RBAC):** Distinct roles for `Admin`, `Supplier`, and `Client`.
+- **Clean Architecture:** Separation of concerns using specific projects for API, Data, and UI.
 
-4. CLIENTE (Para fazer compras):
-   Email: rod@email.com
-   Pass:  Rod123@
+---
 
---- COMO EXECUTAR ---
-1. Definir "MyCOLL.API" como Startup Project e iniciar.
-2. Iniciar o Frontend "MyCOLL.Web" (ou App).
+## 🏗️ Project Structure
+
+The solution follows a modular architecture sharing 90% of the UI code between Web and Mobile:
+
+- **`MyCOLL`**: ASP.NET Core Web API (.NET 8). Handles business logic, database access (EF Core), auth, and file storage.
+- **`MyCOLL.Shared` (Razor Class Library)**: The heart of the frontend. Contains all **Pages** (Home, Cart, Products, Orders) and **Components**. Shared between Web and App.
+- **`MyCOLL.App`**: .NET MAUI project. Wraps the RCL to run natively on Android and Windows.
+- **`MyCOLL.Web`**: Blazor WebAssembly Standalone. Wraps the RCL to run in the browser.
+- **`MyCOLL.Data`**: Contains Entity Framework Core contexts, Database Migrations, and Entities.
+
+---
+
+## 🛠️ Technology Stack
+
+- **Framework:** .NET 8
+- **Backend:** ASP.NET Core Web API
+- **Database:** SQL Server (Entity Framework Core Code-First)
+- **Frontend (Web):** Blazor WebAssembly
+- **Frontend (Mobile):** .NET MAUI (Hybrid)
+- **Authentication:** ASP.NET Core Identity + JWT Bearer
+- **Storage:** Local file storage for images (mapped via API static files)
+
+---
+
+## ⚙️ Getting Started
+
+### Prerequisites
+- Visual Studio 2022 or JetBrains Rider
+- .NET 8 SDK
+- SQL Server (LocalDB or Full Instance)
+
+### 1. Database Setup
+1. Configure your connection string in `MyCOLL.API/appsettings.json`.
+   ```json
+   "ConnectionStrings": {
+     "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=MyCOLLdb;Trusted_Connection=True;MultipleActiveResultSets=true"
+   }
+   
+### 2. Running the API
+- Set MyCOLL as the startup project and run it.
+- It usually runs on http://localhost:5276 (check launchSettings.json).
+
+### 3. Running the Frontend
+- Web: Set MyCOLL.Web as startup and run.
+- Mobile: Set MyCOLL.App as startup, select an Emulator (Android) or Windows Machine, and run.
+
+### Authors
+- Guilherme Costa (2022144234)
+- Rodrigo Braga (2023135350)
+
+Project developed for the Web Programming (PWEB) course at ISEC - Coimbra Institute of Engineering.
